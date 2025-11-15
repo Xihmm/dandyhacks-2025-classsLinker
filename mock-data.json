@@ -1,0 +1,42 @@
+[
+  {
+    "id": "CS101",
+    "title": "Introduction to Programming",
+    "department": "Computer Science",
+    "description": "Learn the basics of programming using Python.",
+    "credits": 4,
+    "prerequisites": []
+  },
+  {
+    "id": "CS201",
+    "title": "Data Structures",
+    "department": "Computer Science",
+    "description": "Advanced data structures, algorithms, and complexity.",
+    "credits": 4,
+    "prerequisites": ["CS101", "MATH150"]
+  },
+  {
+    "id": "MATH150",
+    "title": "Discrete Mathematics",
+    "department": "Mathematics",
+    "description": "Logic, proofs, sets, and graph theory.",
+    "credits": 3,
+    "prerequisites": []
+  },
+  {
+    "id": "CS242",
+    "title": "Foundations of AI",
+    "department": "Computer Science",
+    "description": "Introduction to artificial intelligence concepts.",
+    "credits": 3,
+    "prerequisites": ["CS201"]
+  },
+  {
+    "id": "MATH161",
+    "title": "Calculus I",
+    "department": "Mathematics",
+    "description": "Limits, derivatives, and integrals.",
+    "credits": 4,
+    "prerequisites": []
+  }
+]
