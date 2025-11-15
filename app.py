@@ -1,3 +1,4 @@
+from flask import Flask, jsonify, request
 from flask import Flask, jsonify
 import json
 from collections import deque
@@ -100,6 +101,38 @@ def get_shortest_path():
         "semesters": path,
         "semester_count": len(path)
     })
+
+# --- P4 的 LLM API "空壳" 从这里开始 ---
+
+@app.route('/api/parse-course', methods=['POST'])
+def parse_course_with_llm():
+    # 1. (P2/P1) 从前端获取用户发来的原始文本
+    data = request.get_json()
+    if not data or 'text' not in data:
+        return jsonify({"error": "No 'text' field provided"}), 400
+
+    raw_text = data.get('text')
+
+    # 2. (P4) P4 的 LLM 逻辑将在这里实现
+    #    P4 会在这里调用 Google / OpenAI API
+    #    ====================================
+    #    TODO: P4 在这里添加 LLM 调用逻辑
+    #    parsed_json = p4_llm_function(raw_text) 
+    #    ====================================
+
+    # 3. (P3/P4) 在 P4 完成前, 我们先返回一个"假"数据
+    #    这能让 P1/P2 立即开始开发前端!
+    mock_parsed_json = {
+        "id": "LLM-101",
+        "title": "New Course (from LLM)",
+        "description": f"Parsed from: {raw_text[:50]}...",
+        "credits": 3,
+        "prerequisites": ["LLM-PREREQ-1", "LLM-PREREQ-2"]
+    }
+
+    return jsonify(mock_parsed_json)
+
+# --- LLM API "空壳" 在这里结束 ---
 
 
 if __name__ == '__main__':
