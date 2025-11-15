@@ -141,7 +141,8 @@ function App() {
             border: "1px solid #c4c4c4",
             fontSize: "14px",
             outline: "none",
-            background: "#fafafa",
+            background: "#ffffff",
+            color: "#000000",
           }}
         />
         <button
