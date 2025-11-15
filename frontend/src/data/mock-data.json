@@ -1,0 +1,60 @@
+{
+  "nodes": [
+    {"id": "BME 245-01", "department": "BME", "title": "Biomaterials"},
+    {"id": "CHEM 132-01", "department": "CHEM", "title": "Chemical Concepts II"},
+    {"id": "CHEM 132-02", "department": "CHEM", "title": "Chemical Concepts II"},
+    {"id": "CHEM 244W-02", "department": "CHEM", "title": "Adv Nuclear Sci Ed Lab"},
+    {"id": "CHEM 244W-01", "department": "CHEM", "title": "The Adv Nuclear Sci Edu Lab"},
+    {"id": "CHEM 444-01", "department": "CHEM", "title": "The Adv Nuclear Sci Edu Lab"},
+    {"id": "PHYS 113P-01", "department": "PHYS", "title": "Gen Physics I"},
+    {"id": "PHYS 121P-01", "department": "PHYS", "title": "Mechanics"},
+    {"id": "PHYS 245W-02", "department": "PHYS", "title": "Adv Expermt in Nuc Part"},
+    {"id": "PHYS 245W-01", "department": "PHYS", "title": "Adv Expermt in Nuc Part"},
+    {"id": "PHYS 445-01", "department": "PHYS", "title": "Adv Expermt in Nuc Part"},
+    {"id": "AHST 1000-01", "department": "AHST", "title": "Teaching Assistantship"},
+    {"id": "BME 1000-01", "department": "BME", "title": "Teaching Assistantship"},
+    {"id": "CASC 394-01", "department": "CASC", "title": "Internship"},
+    {"id": "CASC 394I-01", "department": "CASC", "title": "Special Internship"},
+    {"id": "CHEM 1000-01", "department": "CHEM", "title": "Teaching Assistantship"},
+    {"id": "CSC 394-02", "department": "CSC", "title": "Internship"},
+    {"id": "DMST 394-01", "department": "DMST", "title": "Internship"},
+    {"id": "ECE 1000-01", "department": "ECE", "title": "Teaching Assistantship"},
+    {"id": "ECON 1000-01", "department": "ECON", "title": "Teaching Assistantship"}
+  ],
+  "links": [
+
+    { "source": "CHEM 132-01", "target": "CHEM 131", "type": "prerequisite" },
+    { "source": "CHEM 132-02", "target": "CHEM 131", "type": "prerequisite" },
+
+    { "source": "CHEM 244W-02", "target": "PHYS 245W", "type": "prerequisite" },
+    { "source": "CHEM 244W-01", "target": "PHYS 245W", "type": "prerequisite" },
+    { "source": "CHEM 444-01", "target": "PHYS 245W", "type": "prerequisite" },
+
+    { "source": "PHYS 121P-01", "target": "MATH 162", "type": "prerequisite" },
+    { "source": "PHYS 121P-01", "target": "MATH 172", "type": "prerequisite" },
+    { "source": "PHYS 121P-01", "target": "MATH 143", "type": "prerequisite" },
+
+    { "source": "PHYS 245W-01", "target": "PHYS 114", "type": "prerequisite" },
+    { "source": "PHYS 245W-01", "target": "PHYS 122", "type": "prerequisite" },
+    { "source": "PHYS 245W-01", "target": "PHYS 142", "type": "prerequisite" },
+    { "source": "PHYS 245W-01", "target": "PHYS 123", "type": "prerequisite" },
+    { "source": "PHYS 245W-01", "target": "PHYS 143", "type": "prerequisite" },
+    { "source": "PHYS 245W-01", "target": "PHYS 217", "type": "prerequisite" },
+    { "source": "PHYS 245W-01", "target": "PHYS 237", "type": "prerequisite" },
+
+
+    { "source": "CHEM 132-01", "target": "CHEM 132-02", "type": "same_department" },
+    { "source": "CHEM 244W-01", "target": "CHEM 244W-02", "type": "same_department" },
+    { "source": "CHEM 444-01", "target": "CHEM 132-01", "type": "same_department" },
+    { "source": "CHEM 1000-01", "target": "CHEM 132-01", "type": "same_department" },
+
+    { "source": "PHYS 113P-01", "target": "PHYS 121P-01", "type": "same_department" },
+    { "source": "PHYS 245W-01", "target": "PHYS 245W-02", "type": "same_department" },
+    { "source": "PHYS 445-01", "target": "PHYS 245W-01", "type": "same_department" },
+
+    { "source": "BME 245-01", "target": "BME 1000-01", "type": "same_department" },
+
+    { "source": "CASC 394-01", "target": "CASC 394I-01", "type": "same_department" }
+  ]
+}
+
