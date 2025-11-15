@@ -1,0 +1,58 @@
+/* 页面总布局：左右结构 */
+.app-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #f4f6ff;
+  font-family: "Inter", "PingFang SC", sans-serif;
+}
+
+/* 左侧思维导图区域 */
+.mindmap-wrapper {
+  flex: 1;
+  overflow: auto;
+  padding: 32px;
+  display: flex;
+  justify-content: center;   /* 居中内容，避免靠左太紧 */
+  align-items: flex-start;
+}
+
+/* 插件窗口区域（右侧小窗） */
+.plugin-window {
+  width: 320px;
+  min-width: 320px;
+  border-left: 1px solid #ddd;
+  background: #faf7ef;
+  padding: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+/* 小窗内容卡片 */
+.plugin-card {
+  width: 100%;
+  background: #fdf3d9;
+  border: 2px dashed #c79f42;
+  padding: 20px;
+  border-radius: 14px;
+  box-sizing: border-box;
+}
+
+.plugin-card h2 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  color: #333;
+}
+
+/* 防止 SVG 超出被裁剪（画箭头不会被截掉） */
+svg {
+  overflow: visible;
+}
+
+/* 更通用字体，显示更干净 */
+text {
+  font-family: "Inter", "PingFang SC", sans-serif;
+}
