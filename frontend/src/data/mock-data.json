@@ -8,7 +8,8 @@
       "credits": 4,
       "instructor": "Adam Purtee",
       "offered": "Fall, Spring, Summer",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Foundations"
     },
     {
       "id": "CSC 161",
@@ -18,7 +19,8 @@
       "credits": 4,
       "instructor": "Andrew Read-McFarland",
       "offered": "Fall, Spring, Summer",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Foundations"
     },
     {
       "id": "CSC 171",
@@ -28,7 +30,8 @@
       "credits": 4,
       "instructor": "Eustrat Zhupa",
       "offered": "Fall, Spring, Summer",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Foundations"
     },
     {
       "id": "CSC 172",
@@ -41,7 +44,8 @@
       "prerequisites": [
         "CSC 171",
         "MATH 150"
-      ]
+      ],
+      "cluster": "Foundations"
     },
     {
       "id": "CSC 173",
@@ -54,7 +58,8 @@
       "prerequisites": [
         "CSC 172",
         "MATH 150"
-      ]
+      ],
+      "cluster": "Core"
     },
     {
       "id": "CSC 186",
@@ -118,7 +123,8 @@
       "credits": 4,
       "instructor": "Zhen Bai",
       "offered": "Fall",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "HCI"
     },
     {
       "id": "CSC 229",
@@ -128,7 +134,8 @@
       "credits": 4,
       "instructor": "Robert Jacobs",
       "offered": "Fall, Spring, Summer",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "HCI"
     },
     {
       "id": "CSC 240",
@@ -142,7 +149,8 @@
         "CSC 171",
         "CSC 172",
         "EQUIV-MATH16X"
-      ]
+      ],
+      "cluster": "AI"
     },
     {
       "id": "CSC 242",
@@ -152,7 +160,8 @@
       "credits": 4,
       "instructor": "Adam Purtee",
       "offered": "Fall, Spring",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Core"
     },
     {
       "id": "CSC 243",
@@ -172,7 +181,8 @@
       "credits": 4,
       "instructor": "Xiangxiang Xu",
       "offered": "Fall, Spring",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "AI"
     },
     {
       "id": "CSC 247",
@@ -182,7 +192,8 @@
       "credits": 4,
       "instructor": "Hangfeng He",
       "offered": "Spring",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "AI"
     },
     {
       "id": "CSC 249",
@@ -195,7 +206,8 @@
       "prerequisites": [
         "EQUIV-MATH16X",
         "CSC 242"
-      ]
+      ],
+      "cluster": "AI"
     },
     {
       "id": "CSC 252",
@@ -208,7 +220,8 @@
       "prerequisites": [
         "MATH 150",
         "CSC 172"
-      ]
+      ],
+      "cluster": "Core"
     },
     {
       "id": "CSC 254",
@@ -218,7 +231,8 @@
       "credits": 4,
       "instructor": "George Ferguson",
       "offered": "Fall, Spring",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Core"
     },
     {
       "id": "CSC 258",
@@ -228,7 +242,8 @@
       "credits": 4,
       "instructor": "Michael Scott",
       "offered": "Spring",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Systems"
     },
     {
       "id": "CSC 261",
@@ -255,7 +270,8 @@
         "CSC 173",
         "CSC 252",
         "CSC 261"
-      ]
+      ],
+      "cluster": "Systems"
     },
     {
       "id": "CSC 273",
@@ -265,7 +281,8 @@
       "credits": 2,
       "instructor": "Joseph Loporcaro",
       "offered": "Fall, Spring, Summer",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Writing"
     },
     {
       "id": "CSC 276",
@@ -275,7 +292,8 @@
       "credits": 4,
       "instructor": "Yanan Guo",
       "offered": "Fall",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Systems"
     },
     {
       "id": "CSC 280",
@@ -288,7 +306,8 @@
       "prerequisites": [
         "CSC 173",
         "MATH 150"
-      ]
+      ],
+      "cluster": "Core"
     },
     {
       "id": "CSC 282",
@@ -302,7 +321,8 @@
         "CSC 172",
         "MATH 150",
         "EQUIV-MATH17X"
-      ]
+      ],
+      "cluster": "Core"
     },
     {
       "id": "CSC 283",
@@ -312,7 +332,8 @@
       "credits": 4,
       "instructor": "Monika Polak",
       "offered": "Spring",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Theory"
     },
     {
       "id": "CSC 285",
@@ -322,7 +343,8 @@
       "credits": 4,
       "instructor": "Lane Hemaspaandra",
       "offered": "Spring",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Theory"
     },
     {
       "id": "CSC 288",
@@ -332,7 +354,8 @@
       "credits": 4,
       "instructor": "Kaave Hosseini",
       "offered": "Fall",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Theory"
     },
     {
       "id": "CSC 295",
@@ -352,25 +375,328 @@
       "credits": 4,
       "instructor": "Joseph Loporcaro",
       "offered": "Fall, Spring, Summer",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Writing"
     },
     {
       "id": "MATH 150",
       "department": "MATH",
+      "school": "Arts, Sciences, and Engineering",
       "title": "MATH 150 (independent math requirement)",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Foundations"
+    },
+    {
+      "id": "EQUIV-MATH14X",
+      "department": "MATH-EQUIV",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Any 14X-level Calculus (e.g., MATH 141 / 142 / 143 / 161 / 162 / 171 / 172)",
+      "prerequisites": [],
+      "cluster": "Foundations"
     },
     {
       "id": "EQUIV-MATH16X",
       "department": "MATH-EQUIV",
+      "school": "Arts, Sciences, and Engineering",
       "title": "Any 16X-level Calculus (e.g., MATH 161 / 162 / 171 / 172)",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Foundations"
     },
     {
       "id": "EQUIV-MATH17X",
       "department": "MATH-EQUIV",
+      "school": "Arts, Sciences, and Engineering",
       "title": "Any 17X-level Calculus (e.g., MATH 171 / 172)",
-      "prerequisites": []
+      "prerequisites": [],
+      "cluster": "Foundations"
+    },
+    {
+      "id": "STAT 190",
+      "department": "MATH/STAT",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Introduction to Statistical Methodology",
+      "prerequisites": [],
+      "cluster": "MathReq"
+    },
+    {
+      "id": "ECON 230",
+      "department": "MATH/STAT",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Economic Statistics",
+      "prerequisites": [],
+      "cluster": "MathReq"
+    },
+    {
+      "id": "MATH/STAT 201",
+      "department": "MATH/STAT",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Intro to Probability",
+      "prerequisites": [],
+      "cluster": "MathReq"
+    },
+    {
+      "id": "MATH 165",
+      "department": "MATH/STAT",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Linear Algebra with Differential Equations",
+      "prerequisites": [],
+      "cluster": "MathReq"
+    },
+    {
+      "id": "MATH 173",
+      "department": "MATH/STAT",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Honors Calculus III",
+      "prerequisites": [],
+      "cluster": "MathReq"
+    },
+    {
+      "id": "CSC 245",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Deep Learning",
+      "prerequisites": [],
+      "cluster": "AI"
+    },
+    {
+      "id": "CSC 266",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Frontiers in Deep Learning",
+      "prerequisites": [],
+      "cluster": "AI"
+    },
+    {
+      "id": "CSC 277",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "End-to-End Deep Learning",
+      "prerequisites": [],
+      "cluster": "AI"
+    },
+    {
+      "id": "CSC 211",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Introduction to HCI",
+      "prerequisites": [],
+      "cluster": "HCI"
+    },
+    {
+      "id": "CSC 212",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Human Computer Interaction",
+      "prerequisites": [],
+      "cluster": "HCI"
+    },
+    {
+      "id": "CSC 259",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Computer Imaging & Graphics",
+      "prerequisites": [],
+      "cluster": "HCI"
+    },
+    {
+      "id": "CSC 253",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Collaborative Programming and Software Design",
+      "prerequisites": [],
+      "cluster": "Systems"
+    },
+    {
+      "id": "CSC 255",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Software Analysis & Improvement",
+      "prerequisites": [],
+      "cluster": "Systems"
+    },
+    {
+      "id": "CSC 256",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Operating Systems",
+      "prerequisites": [],
+      "cluster": "Systems"
+    },
+    {
+      "id": "CSC 257",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Computer Networks",
+      "prerequisites": [],
+      "cluster": "Systems"
+    },
+    {
+      "id": "ECE 204",
+      "department": "ECE",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Multiprocessor Architecture",
+      "prerequisites": [],
+      "cluster": "Systems"
+    },
+    {
+      "id": "CSC 290",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Machine Learning Systems",
+      "prerequisites": [],
+      "cluster": "Systems"
+    },
+    {
+      "id": "CSC 279",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Computational Geometry",
+      "prerequisites": [],
+      "cluster": "Theory"
+    },
+    {
+      "id": "CSC 281",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Intro to Cryptography",
+      "prerequisites": [],
+      "cluster": "Theory"
+    },
+    {
+      "id": "CSC 284",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Advanced Algorithms",
+      "prerequisites": [],
+      "cluster": "Theory"
+    },
+    {
+      "id": "CSC 286",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Computational Complexity",
+      "prerequisites": [],
+      "cluster": "Theory"
+    },
+    {
+      "id": "CSC 287",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Sampling Algorithms",
+      "prerequisites": [],
+      "cluster": "Theory"
+    },
+    {
+      "id": "CSC 289",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Algorithmic Game Theory",
+      "prerequisites": [],
+      "cluster": "Theory"
+    },
+    {
+      "id": "WRTG 273",
+      "department": "WRTG",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Communicating Your Professional Identity",
+      "prerequisites": [],
+      "cluster": "Writing"
+    },
+    {
+      "id": "WRTG 290B",
+      "department": "WRTG",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Writing About and With Artificial Intelligence",
+      "prerequisites": [],
+      "cluster": "Writing"
+    },
+    {
+      "id": "CSC 273W",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Writing in Computer Science",
+      "prerequisites": [],
+      "cluster": "Writing"
+    },
+    {
+      "id": "CSC 299W",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Social Implications of Computing (W)",
+      "prerequisites": [],
+      "cluster": "Writing"
+    },
+    {
+      "id": "CSC 391W",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Independent Study Writing",
+      "prerequisites": [],
+      "cluster": "Writing"
+    },
+    {
+      "id": "CSC 395H",
+      "department": "CSC",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Honors Thesis",
+      "prerequisites": [],
+      "cluster": "Writing"
+    },
+    {
+      "id": "PHIL 235W",
+      "department": "PHIL",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Data, Algorithms, Justice",
+      "prerequisites": [],
+      "cluster": "Writing"
+    },
+    {
+      "id": "PHIL 243W",
+      "department": "PHIL",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Theory of Knowledge",
+      "prerequisites": [],
+      "cluster": "Writing"
+    },
+    {
+      "id": "PHIL 244W",
+      "department": "PHIL",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Philosophy of Mind",
+      "prerequisites": [],
+      "cluster": "Writing"
+    },
+    {
+      "id": "PHIL 246W",
+      "department": "PHIL",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Social Character Knowledge",
+      "prerequisites": [],
+      "cluster": "Writing"
+    },
+    {
+      "id": "PHIL 247W",
+      "department": "PHIL",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Philosophy of Language",
+      "prerequisites": [],
+      "cluster": "Writing"
+    },
+    {
+      "id": "PHIL 252W",
+      "department": "PHIL",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Philosophy of Science",
+      "prerequisites": [],
+      "cluster": "Writing"
+    },
+    {
+      "id": "PHIL 257W",
+      "department": "PHIL",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Philosophy of Artificial Intelligence",
+      "prerequisites": [],
+      "cluster": "Writing"
     }
   ],
   "links": [
@@ -488,2486 +814,6 @@
       "source": "CSC 282",
       "target": "EQUIV-MATH17X",
       "type": "prerequisite"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 161",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 171",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 172",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 173",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 186",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 200",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 209",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 210",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 214",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 216",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 229",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 240",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 160",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 171",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 172",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 173",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 186",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 200",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 209",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 210",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 214",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 216",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 229",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 240",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 161",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 172",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 173",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 186",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 200",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 209",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 210",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 214",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 216",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 229",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 240",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 171",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 173",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 186",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 200",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 209",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 210",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 214",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 216",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 229",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 240",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 172",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 186",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 200",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 209",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 210",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 214",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 216",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 229",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 240",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 173",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 200",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 209",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 210",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 214",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 216",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 229",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 240",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 186",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 209",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 210",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 214",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 216",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 229",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 240",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 200",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 210",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 214",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 216",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 229",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 240",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 209",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 214",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 216",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 229",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 240",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 210",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 216",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 229",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 240",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 214",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 229",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 240",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 216",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 240",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 229",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 242",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 240",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 243",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 242",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 246",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 243",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 247",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 246",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 249",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 247",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 252",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 249",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 254",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 252",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 254",
-      "target": "CSC 258",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 254",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 254",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 254",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 254",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 254",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 254",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 254",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 254",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 254",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 254",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 254",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 258",
-      "target": "CSC 261",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 258",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 258",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 258",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 258",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 258",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 258",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 258",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 258",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 258",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 258",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 261",
-      "target": "CSC 263",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 261",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 261",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 261",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 261",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 261",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 261",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 261",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 261",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 261",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 263",
-      "target": "CSC 273",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 263",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 263",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 263",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 263",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 263",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 263",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 263",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 263",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 273",
-      "target": "CSC 276",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 273",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 273",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 273",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 273",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 273",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 273",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 273",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 276",
-      "target": "CSC 280",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 276",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 276",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 276",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 276",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 276",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 276",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 280",
-      "target": "CSC 282",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 280",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 280",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 280",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 280",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 280",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 282",
-      "target": "CSC 283",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 282",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 282",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 282",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 282",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 283",
-      "target": "CSC 285",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 283",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 283",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 283",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 285",
-      "target": "CSC 288",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 285",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 285",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 288",
-      "target": "CSC 295",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 288",
-      "target": "CSC 299",
-      "type": "same_department"
-    },
-    {
-      "source": "CSC 295",
-      "target": "CSC 299",
-      "type": "same_department"
     }
   ]
 }
