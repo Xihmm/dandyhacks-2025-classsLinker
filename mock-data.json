@@ -1,92 +1,67 @@
-[
-  {
-    "id": "BME 245-01",
-    "title": "Biomaterials",
-    "department": "Biomedical Engineering",
-    "description": "Introduction to biomaterials, focusing on mechanical and chemical interactions in biological systems.",
-    "credits": 4,
-    "instructor": "Kanika Vats",
-    "schedule_day": ["Tuesday", "Thursday"],
-    "start_time": 940,
-    "end_time": 1055,
-    "is_open": true,
-    "restrictions": "",
-    "prerequisites": [],
-    "course_type": "Lecture"
-  },
-  {
-    "id": "CHEM 132-01",
-    "title": "Chemical Concepts, Systems, and Practices II",
-    "department": "Chemistry",
-    "description": "Continuation of chemistry fundamentals including bonding, thermodynamics, and equilibrium.",
-    "credits": 5,
-    "instructor": "Benjamin Haefner",
-    "schedule_day": ["Tuesday", "Thursday"],
-    "start_time": 1105,
-    "end_time": 1220,
-    "is_open": false,
-    "restrictions": "Pre-Requisite: CHEM 131",
-    "prerequisites": ["CHEM 131"],
-    "course_type": "Lecture"
-  },
-  {
-    "id": "CHEM 132-02",
-    "title": "Chemical Concepts, Systems, and Practices II",
-    "department": "Chemistry",
-    "description": "Continuation of chemistry fundamentals including bonding, thermodynamics, and equilibrium.",
-    "credits": 5,
-    "instructor": "Benjamin Haefner",
-    "schedule_day": ["Tuesday", "Thursday"],
-    "start_time": 940,
-    "end_time": 1055,
-    "is_open": true,
-    "restrictions": "Pre-Requisite: CHEM 131",
-    "prerequisites": ["CHEM 131"],
-    "course_type": "Lecture"
-  },
-  {
-    "id": "CHEM 244W-01",
-    "title": "Adv Nuclear Sci Edu Lab",
-    "department": "Chemistry",
-    "description": "Nuclear science experimental lab focused on isotope measurements and detection.",
-    "credits": 4,
-    "instructor": "Wolf Schroeder",
-    "schedule_day": ["Monday"],
-    "start_time": 900,
-    "end_time": 950,
-    "is_open": false,
-    "restrictions": "",
-    "prerequisites": ["PHYS 245W"],
-    "course_type": "Discussion (Lab/Lecture)"
-  },
-  {
-    "id": "PHYS 113P-01",
-    "title": "Gen Physics I (Self-Paced)",
-    "department": "Physics",
-    "description": "Self-paced introductory physics course covering mechanics, motion, and basic forces.",
-    "credits": 4,
-    "instructor": "Sheth Nyubile",
-    "schedule_day": [],
-    "start_time": null,
-    "end_time": null,
-    "is_open": true,
-    "restrictions": "Instructor permission required.",
-    "prerequisites": [],
-    "course_type": "Lecture"
-  },
-  {
-    "id": "AHST 1000-01",
-    "title": "Teaching Assistantship",
-    "department": "Art & Art History",
-    "description": "Teaching assistant experience for qualified students in Art and Art History.",
-    "credits": 0,
-    "instructor": "Anna Rosensweig",
-    "schedule_day": [],
-    "start_time": null,
-    "end_time": null,
-    "is_open": true,
-    "restrictions": "",
-    "prerequisites": [],
-    "course_type": "Internship"
-  }
+{
+  "nodes": [
+    {"id": "BME 245-01", "department": "BME", "title": "Biomaterials"},
+    {"id": "CHEM 132-01", "department": "CHEM", "title": "Chemical Concepts II"},
+    {"id": "CHEM 132-02", "department": "CHEM", "title": "Chemical Concepts II"},
+    {"id": "CHEM 244W-02", "department": "CHEM", "title": "Adv Nuclear Sci Ed Lab"},
+    {"id": "CHEM 244W-01", "department": "CHEM", "title": "The Adv Nuclear Sci Edu Lab"},
+    {"id": "CHEM 444-01", "department": "CHEM", "title": "The Adv Nuclear Sci Edu Lab"},
+    {"id": "PHYS 113P-01", "department": "PHYS", "title": "Gen Physics I"},
+    {"id": "PHYS 121P-01", "department": "PHYS", "title": "Mechanics"},
+    {"id": "PHYS 245W-02", "department": "PHYS", "title": "Adv Expermt in Nuc Part"},
+    {"id": "PHYS 245W-01", "department": "PHYS", "title": "Adv Expermt in Nuc Part"},
+    {"id": "PHYS 445-01", "department": "PHYS", "title": "Adv Expermt in Nuc Part"},
+    {"id": "AHST 1000-01", "department": "AHST", "title": "Teaching Assistantship"},
+    {"id": "BME 1000-01", "department": "BME", "title": "Teaching Assistantship"},
+    {"id": "CASC 394-01", "department": "CASC", "title": "Internship"},
+    {"id": "CASC 394I-01", "department": "CASC", "title": "Special Internship"},
+    {"id": "CHEM 1000-01", "department": "CHEM", "title": "Teaching Assistantship"},
+    {"id": "CSC 394-02", "department": "CSC", "title": "Internship"},
+    {"id": "DMST 394-01", "department": "DMST", "title": "Internship"},
+    {"id": "ECE 1000-01", "department": "ECE", "title": "Teaching Assistantship"},
+    {"id": "ECON 1000-01", "department": "ECON", "title": "Teaching Assistantship"}
+  ],
+  "links": [
+    /* === 1. prerequisite edges === */
+
+    { "source": "CHEM 132-01", "target": "CHEM 131", "type": "prerequisite" },
+    { "source": "CHEM 132-02", "target": "CHEM 131", "type": "prerequisite" },
+
+    { "source": "CHEM 244W-02", "target": "PHYS 245W", "type": "prerequisite" },
+    { "source": "CHEM 244W-01", "target": "PHYS 245W", "type": "prerequisite" },
+    { "source": "CHEM 444-01", "target": "PHYS 245W", "type": "prerequisite" },
+
+    { "source": "PHYS 121P-01", "target": "MATH 162", "type": "prerequisite" },
+    { "source": "PHYS 121P-01", "target": "MATH 172", "type": "prerequisite" },
+    { "source": "PHYS 121P-01", "target": "MATH 143", "type": "prerequisite" },
+
+    { "source": "PHYS 245W-01", "target": "PHYS 114", "type": "prerequisite" },
+    { "source": "PHYS 245W-01", "target": "PHYS 122", "type": "prerequisite" },
+    { "source": "PHYS 245W-01", "target": "PHYS 142", "type": "prerequisite" },
+    { "source": "PHYS 245W-01", "target": "PHYS 123", "type": "prerequisite" },
+    { "source": "PHYS 245W-01", "target": "PHYS 143", "type": "prerequisite" },
+    { "source": "PHYS 245W-01", "target": "PHYS 217", "type": "prerequisite" },
+    { "source": "PHYS 245W-01", "target": "PHYS 237", "type": "prerequisite" },
+
+    /* === 2. same_department edges === */
+
+    /* CHEM cluster */
+    { "source": "CHEM 132-01", "target": "CHEM 132-02", "type": "same_department" },
+    { "source": "CHEM 244W-01", "target": "CHEM 244W-02", "type": "same_department" },
+    { "source": "CHEM 444-01", "target": "CHEM 132-01", "type": "same_department" },
+    { "source": "CHEM 1000-01", "target": "CHEM 132-01", "type": "same_department" },
+
+    /* PHYS cluster */
+    { "source": "PHYS 113P-01", "target": "PHYS 121P-01", "type": "same_department" },
+    { "source": "PHYS 245W-01", "target": "PHYS 245W-02", "type": "same_department" },
+    { "source": "PHYS 445-01", "target": "PHYS 245W-01", "type": "same_department" },
+
+    /* BME cluster */
+    { "source": "BME 245-01", "target": "BME 1000-01", "type": "same_department" },
+
+    /* CASC cluster */
+    { "source": "CASC 394-01", "target": "CASC 394I-01", "type": "same_department" }
+  ]
+}
+
 ]
