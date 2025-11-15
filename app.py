@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-from flask import Flask, jsonify
 import json
 from collections import deque
 
@@ -28,7 +27,7 @@ def calculate_shortest_path():
     data = load_mock_data()
     courses = data.get("nodes", []) 
     
-    # 2. 预处理 (和我们第一个“同修”版本一样)
+    # 2. 预处理
     in_degree = {}
     adj_list = {}
     all_course_ids = set()
@@ -47,23 +46,18 @@ def calculate_shortest_path():
         course = course_map[course_id]
         
         # A. 处理严格的“先修课” (prerequisites: [String])
+        #    P4 已经把 "OR" 逻辑 (e.g., EQUIV-MATH16X) 清洗干净了
+        #    所以我们的算法保持简单即可
         strict_prereqs = course.get('prerequisites', [])
         for prereq_id in strict_prereqs:
             if prereq_id in all_course_ids:
                 adj_list[prereq_id].append(course_id)
                 in_degree[course_id] += 1
                 
-        # B. 处理“同修课” (corequisites: [String])
-        coreq_ids = course.get('corequisites', [])
-        for coreq_id in coreq_ids:
-            if coreq_id in all_course_ids:
-                coreq_course = course_map[coreq_id]
-                coreq_strict_prereqs = coreq_course.get('prerequisites', [])
-                
-                for prereq_of_coreq_id in coreq_strict_prereqs:
-                    if prereq_of_coreq_id in all_course_ids:
-                        adj_list[prereq_of_coreq_id].append(course_id)
-                        in_degree[course_id] += 1
+        # B. "同修课" (Corequisites) 逻辑已移除
+        #    因为 P4 当前的 mock-data.json 中不包含 'corequisites' 键
+    
+    
     # 3. 准备拓扑排序 (Kahn's Algorithm)
     
     # "queue" 里放所有“第1学期”的课 (入度为0的课)
@@ -115,7 +109,7 @@ def get_shortest_path():
     })
 
 # --- P4 的 LLM API "空壳" 从这里开始 ---
-
+# (这部分代码保留你之前的版本，等你准备好了再改)
 @app.route('/api/parse-course', methods=['POST'])
 def parse_course_with_llm():
     # 1. (P2/P1) 从前端获取用户发来的原始文本
@@ -126,14 +120,11 @@ def parse_course_with_llm():
     raw_text = data.get('text')
 
     # 2. (P4) P4 的 LLM 逻辑将在这里实现
-    #    P4 会在这里调用 Google / OpenAI API
     #    ====================================
     #    TODO: P4 在这里添加 LLM 调用逻辑
-    #    parsed_json = p4_llm_function(raw_text) 
     #    ====================================
 
     # 3. (P3/P4) 在 P4 完成前, 我们先返回一个"假"数据
-    #    这能让 P1/P2 立即开始开发前端!
     mock_parsed_json = {
         "id": "LLM-101",
         "title": "New Course (from LLM)",
