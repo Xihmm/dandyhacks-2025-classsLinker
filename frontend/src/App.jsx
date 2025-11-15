@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CourseGraph from "./components/CourseGraph";
+import CsRequirementsPage from "./components/CsRequirementsPage";
 
 function CourseDetail({ course }) {
   if (!course) {
@@ -83,6 +84,7 @@ function App() {
   const [focusedCourseId, setFocusedCourseId] = useState(null);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [searchText, setSearchText] = useState("");
+  const [activePage, setActivePage] = useState("graph"); // "graph" | "cs"
 
   // 点击云里的课程时触发
   const handleNodeSelect = (id, course) => {
@@ -127,6 +129,47 @@ function App() {
           background: "#ffffff",
         }}
       >
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            marginRight: "16px",
+          }}
+        >
+          <button
+            onClick={() => setActivePage("graph")}
+            style={{
+              padding: "6px 12px",
+              borderRadius: "999px",
+              border: "none",
+              fontSize: "14px",
+              fontWeight: 500,
+              cursor: "pointer",
+              background:
+                activePage === "graph" ? "#111827" : "transparent",
+              color: activePage === "graph" ? "#ffffff" : "#374151",
+            }}
+          >
+            Course Graph
+          </button>
+          <button
+            onClick={() => setActivePage("cs")}
+            style={{
+              padding: "6px 12px",
+              borderRadius: "999px",
+              border: "none",
+              fontSize: "14px",
+              fontWeight: 500,
+              cursor: "pointer",
+              background:
+                activePage === "cs" ? "#111827" : "transparent",
+              color: activePage === "cs" ? "#ffffff" : "#374151",
+            }}
+          >
+            CS Requirements
+          </button>
+        </div>
+
         <input
           placeholder="输入课程号（如 CSC172）"
           value={searchText}
@@ -152,8 +195,8 @@ function App() {
             fontSize: "14px",
             borderRadius: "999px",
             border: "none",
-            background: "#2563eb",     // 深蓝
-            color: "#ffffff",          // 白字
+            background: "#2563eb",
+            color: "#ffffff",
             cursor: "pointer",
             fontWeight: 500,
           }}
@@ -167,8 +210,8 @@ function App() {
             fontSize: "14px",
             borderRadius: "999px",
             border: "none",
-            background: "#4b5563",     // 深灰
-            color: "#ffffff",          // 白字
+            background: "#4b5563",
+            color: "#ffffff",
             cursor: "pointer",
             fontWeight: 500,
           }}
@@ -185,25 +228,34 @@ function App() {
           minHeight: 0,
         }}
       >
-        {/* 左边课程云 */}
-        <div style={{ flex: 2, minWidth: 0 }}>
-          <CourseGraph
-            onNodeSelect={handleNodeSelect}
-            focusedCourseId={focusedCourseId}
-          />
-        </div>
+        {activePage === "graph" ? (
+          <>
+            {/* 左边课程云 */}
+            <div style={{ flex: 2, minWidth: 0 }}>
+              <CourseGraph
+                onNodeSelect={handleNodeSelect}
+                focusedCourseId={focusedCourseId}
+              />
+            </div>
 
-        {/* 右边详情 panel */}
-        <div
-          style={{
-            width: "320px",
-            borderLeft: "1px solid #eee",
-            background: "#fafafa",
-            boxSizing: "border-box",
-          }}
-        >
-          <CourseDetail course={selectedCourse} />
-        </div>
+            {/* 右边详情 panel */}
+            <div
+              style={{
+                width: "320px",
+                borderLeft: "1px solid #eee",
+                background: "#fafafa",
+                boxSizing: "border-box",
+              }}
+            >
+              <CourseDetail course={selectedCourse} />
+            </div>
+          </>
+        ) : (
+          // CS Requirements 副页面全宽显示
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <CsRequirementsPage />
+          </div>
+        )}
       </div>
     </div>
   );
