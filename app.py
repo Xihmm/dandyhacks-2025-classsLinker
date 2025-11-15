@@ -24,34 +24,46 @@ def get_courses():
 
 
 def calculate_shortest_path():
-    # 1. 加载数据
-    courses = load_mock_data()
-
-    # 2. 预处理数据: 建立 "图"
-    #    我们需要两个东西:
-    #    a) "in_degree": 记录每门课有多少先修课 (e.g., CS201: 2)
-    #    b) "adj_list":  记录每门课"解锁"了哪些后续课 (e.g., CS101 -> [CS201])
+    # 1. 加载数据 (P4 的 { "nodes": [...] } 结构)
+    data = load_mock_data()
+    courses = data.get("nodes", []) 
     
+    # 2. 预处理 (和我们第一个“同修”版本一样)
     in_degree = {}
     adj_list = {}
     all_course_ids = set()
-
+    course_map = {} 
+    
+    # --- 第一次遍历: 初始化 ---
     for course in courses:
         course_id = course['id']
         all_course_ids.add(course_id)
-        in_degree[course_id] = 0 # 先假设为0
+        course_map[course_id] = course
+        in_degree[course_id] = 0
         adj_list[course_id] = []
 
-    # 第二次遍历，建立关系
-    for course in courses:
-        course_id = course['id']
-        for prereq_id in course['prerequisites']:
-            # 确保先修课在我们的数据中
+    # --- 第二次遍历: 构建图 (只处理简单的 [String] 列表) ---
+    for course_id in all_course_ids:
+        course = course_map[course_id]
+        
+        # A. 处理严格的“先修课” (prerequisites: [String])
+        strict_prereqs = course.get('prerequisites', [])
+        for prereq_id in strict_prereqs:
             if prereq_id in all_course_ids:
-                # 关系是: prereq_id -> course_id
                 adj_list[prereq_id].append(course_id)
                 in_degree[course_id] += 1
-            
+                
+        # B. 处理“同修课” (corequisites: [String])
+        coreq_ids = course.get('corequisites', [])
+        for coreq_id in coreq_ids:
+            if coreq_id in all_course_ids:
+                coreq_course = course_map[coreq_id]
+                coreq_strict_prereqs = coreq_course.get('prerequisites', [])
+                
+                for prereq_of_coreq_id in coreq_strict_prereqs:
+                    if prereq_of_coreq_id in all_course_ids:
+                        adj_list[prereq_of_coreq_id].append(course_id)
+                        in_degree[course_id] += 1
     # 3. 准备拓扑排序 (Kahn's Algorithm)
     
     # "queue" 里放所有“第1学期”的课 (入度为0的课)
