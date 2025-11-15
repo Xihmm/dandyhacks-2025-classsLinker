@@ -1,19 +1,24 @@
 import React, { useMemo } from "react";
 import rawData from "../data/mock-data.json";
 
-// 从 mock-data.json 取出课程节点和连线
-const courseNodes = rawData.nodes ?? rawData;
+// 所有原始节点 + 边
+const rawNodes = rawData.nodes ?? rawData;
 const courseLinks = rawData.links ?? [];
 
-// id -> 课程对象
+// 只展示非 EQUIV-xxxx 课程
+const courseNodes = rawNodes.filter(
+  (c) => c && c.id && !c.id.startsWith("EQUIV-")
+);
+
+// id -> course 映射（包含 EQUIV，在相似度和距离里都可以用）
 const idToCourse = new Map();
-courseNodes.forEach((c) => {
+rawNodes.forEach((c) => {
   if (c && c.id) {
     idToCourse.set(c.id, c);
   }
 });
 
-// 根据 links 构建无向邻接表
+// 构建无向邻接表，用于 BFS 计算图距离（包括 EQUIV）
 function buildAdjacency(nodes, links) {
   const adj = new Map();
 
@@ -31,18 +36,18 @@ function buildAdjacency(nodes, links) {
     if (!adj.has(target)) adj.set(target, new Set());
 
     adj.get(source).add(target);
-    adj.get(target).add(source); // 无向，用于 distance 计算
+    adj.get(target).add(source);
   });
 
   return adj;
 }
 
-const ADJACENCY = buildAdjacency(courseNodes, courseLinks);
+const ADJ = buildAdjacency(rawNodes, courseLinks);
 
-// 用 BFS 计算从 root 出发的最短“边距离”
+// BFS：从 root 出发的最短 hop 数
 function computeDistances(rootId) {
   const dist = new Map();
-  if (!rootId || !ADJACENCY.has(rootId)) return dist;
+  if (!rootId || !ADJ.has(rootId)) return dist;
 
   const q = [rootId];
   dist.set(rootId, 0);
@@ -51,7 +56,7 @@ function computeDistances(rootId) {
     const cur = q.shift();
     const curDist = dist.get(cur);
 
-    for (const nb of ADJACENCY.get(cur) || []) {
+    for (const nb of ADJ.get(cur) || []) {
       if (!dist.has(nb)) {
         dist.set(nb, curDist + 1);
         q.push(nb);
@@ -59,19 +64,24 @@ function computeDistances(rootId) {
     }
   }
 
-  return dist; // Map: id -> 最短边距离
+  return dist; // Map: id -> hops
 }
 
-// wordcloud 颜色表
-const COLORS = [
-  "#7FA7FF",
-  "#FF8C8C",
-  "#FFC86B",
-  "#9FE3A2",
-  "#A785FF",
-  "#FF9AE3",
-  "#6FC6FF",
-  "#F6A27B",
+// 小工具：确保是数组
+function arr(x) {
+  return Array.isArray(x) ? x : [];
+}
+
+// 颜色：根据 id 哈希，稳定但看起来随机
+const COLOR_POOL = [
+  "#5B8FF9",
+  "#61DDAA",
+  "#65789B",
+  "#F6BD16",
+  "#7262FD",
+  "#78D3F8",
+  "#F6903D",
+  "#F08BB4",
 ];
 
 function colorForId(id) {
@@ -79,73 +89,186 @@ function colorForId(id) {
   for (let i = 0; i < id.length; i++) {
     sum += id.charCodeAt(i);
   }
-  return COLORS[sum % COLORS.length];
+  return COLOR_POOL[sum % COLOR_POOL.length];
 }
 
-function randomSize() {
-  return 18 + Math.random() * 16; // 18–34 之间
+// （现在字号不用这个哈希版了，可以留着备选）
+function sizeForId(id) {
+  let sum = 0;
+  for (let i = 0; i < id.length; i++) {
+    sum = (sum * 31 + id.charCodeAt(i)) >>> 0;
+  }
+  const base = 20;
+  const span = 18; // 20–38
+  return base + (sum % span);
 }
 
-// 根据距离生成“云”布局：中心 + 多圈
+/**
+ * rootCourse 和 course 的相似度：
+ * - cluster 一样：+1.6
+ * - department 一样：+1.0
+ * - 共同先修：每个 +0.5，上限 +1.2
+ * - 直接先修关系（两者互为先修）：+2.5
+ *
+ * 相似度越大，后面圈数越小（更靠近）。
+ */
+function similarityScore(rootCourse, course) {
+  if (!rootCourse || !course) return 0;
+  if (rootCourse.id === course.id) return 0; // root 自身单独处理
+
+  let score = 0;
+
+  // cluster 相同
+  if (rootCourse.cluster && course.cluster) {
+    if (rootCourse.cluster === course.cluster) {
+      score += 1.6;
+    }
+  }
+
+  // department 相同
+  if (rootCourse.department && course.department) {
+    if (rootCourse.department === course.department) {
+      score += 1.0;
+    }
+  }
+
+  const rootPre = new Set(arr(rootCourse.prerequisites));
+  const coursePre = new Set(arr(course.prerequisites));
+
+  // 共同先修
+  if (rootPre.size && coursePre.size) {
+    let overlap = 0;
+    rootPre.forEach((p) => {
+      if (coursePre.has(p)) overlap += 1;
+    });
+
+    if (overlap > 0) {
+      const extra = Math.min(1.2, 0.5 * overlap);
+      score += extra;
+    }
+  }
+
+  // 直接先修关系：root 的先修里出现 course.id，或 course 的先修里出现 root.id
+  if (rootPre.has(course.id) || coursePre.has(rootCourse.id)) {
+    score += 2.5;
+  }
+
+  return score;
+}
+
+// 根据图距离 + 相似度给课程一个“重要性字号”
+// 越接近 root、越相似，字号越大；越远越小
+function sizeForCourse(id, graphLevel, sim, rootId) {
+  // root 本身最大
+  if (id === rootId) {
+    return 40;
+  }
+
+  // 基础 18px，图距离每增加一圈略微变小，相似度每 +1 明显变大
+  let size = 18 + 4 * sim - 1.5 * Math.min(graphLevel, 4);
+
+  // 做一下 clamp，别太极端
+  if (size < 12) size = 12;
+  if (size > 30) size = 30;
+
+  return size;
+}
+
+/**
+ * 根据图距离 + 相似度决定圈数并排版：
+ * - root 始终固定在中心
+ * - 其它课程：graphLevel 小、sim 大 → level 小（更靠近）
+ * - effectiveLevel ≈ graphLevel + 0.5 - sim，最小从 1 圈开始
+ * - 同一圈里按角度均匀排开，大圈课程太多时拆成内外双环
+ */
 function layoutNodes(rootId) {
   const distances = computeDistances(rootId);
 
-  const ringBuckets = new Map(); // level -> [id]
+  // BFS 没覆盖到的节点，用“最大已知距离 + 2”作基准
   let maxKnown = 0;
   distances.forEach((d) => {
     if (d > maxKnown) maxKnown = d;
   });
-  const fallbackRing = maxKnown + 1;
+  const fallbackRing = maxKnown + 2;
+
+  const rootCourse = rootId ? idToCourse.get(rootId) : null;
+
+  // level -> [{ id, graphLevel, sim }]
+  const ringBuckets = new Map();
 
   courseNodes.forEach((course) => {
     if (!course || !course.id) return;
     const id = course.id;
-    const level = distances.has(id) ? distances.get(id) : fallbackRing;
+
+    // root 自己单独放在中心，不参与圈分配
+    if (id === rootId) return;
+
+    const graphLevel = distances.has(id) ? distances.get(id) : fallbackRing;
+    const sim = similarityScore(rootCourse, course);
+
+    const effectiveLevelRaw = graphLevel + 0.5 - sim;
+    const effectiveLevel = Math.max(0, effectiveLevelRaw);
+    // 至少从第 1 圈开始，避免把别的课挤进中心
+    const level = Math.max(1, Math.round(effectiveLevel));
+
     if (!ringBuckets.has(level)) ringBuckets.set(level, []);
-    ringBuckets.get(level).push(id);
+    ringBuckets.get(level).push({ id, graphLevel, sim });
   });
 
   const laidOut = [];
 
   const CENTER_X = 50;
   const CENTER_Y = 50;
-  const RADIUS_STEP = 14; // 每一圈的半径（百分比）
+  const RADIUS_STEP = 18; // 每一圈半径差再拉大一点，减少重叠
+
+  // 先把 root 放在中心
+  if (rootCourse && rootId) {
+    const rootSize = sizeForCourse(rootId, 0, 999, rootId); // 会被函数内部强制成最大字号
+    laidOut.push({
+      id: rootId,
+      x: CENTER_X,
+      y: CENTER_Y,
+      course: rootCourse,
+      level: 0,
+      size: rootSize,
+    });
+  }
 
   const sortedLevels = Array.from(ringBuckets.keys()).sort((a, b) => a - b);
 
   sortedLevels.forEach((level) => {
-    const ids = ringBuckets.get(level) || [];
-    if (ids.length === 0) return;
+    const items = ringBuckets.get(level) || [];
+    if (!items.length) return;
 
-    if (level === 0) {
-      // 中心课
-      ids.forEach((id) => {
-        laidOut.push({
-          id,
-          x: CENTER_X,
-          y: CENTER_Y,
-          level,
-          course: idToCourse.get(id) || null,
-          size: randomSize(),
-        });
-      });
-    } else {
-      const radius = RADIUS_STEP * level;
-      const count = ids.length;
-      ids.forEach((id, index) => {
-        const angle = (2 * Math.PI * index) / count;
-        const x = CENTER_X + radius * Math.cos(angle);
-        const y = CENTER_Y + radius * Math.sin(angle);
-        laidOut.push({
-          id,
-          x,
-          y,
-          level,
-          course: idToCourse.get(id) || null,
-          size: randomSize(),
-        });
-      });
+    const count = items.length;
+    const baseRadius = RADIUS_STEP * level;
+
+    // 如果这一圈课程很多，就拆成内外两个半径，交替放置
+    let innerRadius = baseRadius;
+    let outerRadius = baseRadius;
+    const useDoubleRing = count > 16;
+
+    if (useDoubleRing) {
+      innerRadius = baseRadius - 4;
+      outerRadius = baseRadius + 4;
     }
+
+    items.forEach((item, index) => {
+      const angle = (2 * Math.PI * index) / count;
+      const r = useDoubleRing && index % 2 === 0 ? outerRadius : innerRadius;
+
+      const x = CENTER_X + r * Math.cos(angle);
+      const y = CENTER_Y + r * Math.sin(angle);
+      const size = sizeForCourse(item.id, item.graphLevel, item.sim, rootId);
+      laidOut.push({
+        id: item.id,
+        x,
+        y,
+        course: idToCourse.get(item.id) || null,
+        level,
+        size,
+      });
+    });
   });
 
   return laidOut;
@@ -156,18 +279,18 @@ function CourseGraph({
   highlightedPath = [],
   focusedCourseId = null,
 }) {
-  // 默认 root：mock-data 中的第一门课
   const defaultRootId = courseNodes[0]?.id ?? null;
-  // 当前“被选中 / 聚焦”的课由外部驱动
-  const rootId = focusedCourseId ?? defaultRootId;
+  const effectiveFocusId = focusedCourseId ?? defaultRootId;
 
-  // ★★★ 关键：每次 rootId 变化，就按“边距离”重新排布整朵云 ★★★
-  const laidOutNodes = useMemo(() => layoutNodes(rootId), [rootId]);
+  const laidOutNodes = useMemo(
+    () => layoutNodes(effectiveFocusId),
+    [effectiveFocusId]
+  );
 
   const handleNodeClick = (id) => {
     const course = idToCourse.get(id) || null;
     if (onNodeSelect) {
-      onNodeSelect(id, course); // 交给 App 去更新 focusedCourseId
+      onNodeSelect(id, course);
     }
     console.log("Clicked course:", id, course);
   };
@@ -184,15 +307,14 @@ function CourseGraph({
       }}
     >
       {laidOutNodes.map((node) => {
-        const isRoot = node.id === rootId;
+        const isFocused = node.id === effectiveFocusId;
         const isHighlighted = highlightedPath.includes(node.id);
 
-        // 中心最大，其余基于随机 size 略微浮动
-        const base = isRoot ? 36 : node.size;
-        const size = Math.max(
-          14,
-          isRoot ? base : base - (node.level ?? 0) * 2
-        );
+        const x = node.x;
+        const y = node.y;
+
+        const baseSize = node.size || 24;
+        const size = isFocused ? baseSize * 1.7 : baseSize;
 
         const color = colorForId(node.id);
 
@@ -202,11 +324,11 @@ function CourseGraph({
             onClick={() => handleNodeClick(node.id)}
             style={{
               position: "absolute",
-              left: `${node.x}%`,
-              top: `${node.y}%`,
+              left: `${x}%`,
+              top: `${y}%`,
               transform: "translate(-50%, -50%)",
               fontSize: `${size}px`,
-              fontWeight: isRoot ? 700 : 500,
+              fontWeight: isFocused ? 700 : 500,
               color,
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -214,7 +336,7 @@ function CourseGraph({
                 ? "0 0 8px rgba(255,90,95,0.6)"
                 : "0 0 4px rgba(0,0,0,0.12)",
               transition:
-                "left 0.4s ease, top 0.4s ease, font-size 0.2s ease, text-shadow 0.2s ease",
+                "left 0.35s ease, top 0.35s ease, font-size 0.2s ease, text-shadow 0.2s ease",
             }}
           >
             {node.id}
