@@ -296,22 +296,32 @@ function App() {
 
 const handleJumpFromCsToGraph = (courseId) => {
     const id = String(courseId).toUpperCase();
-    let normId = normalizeId(id);
+    let normId = normalizeId(id); // e.g., "MATH141" OR "EQUIVMTH141"
 
-    // ⭐ 步骤 1：硬编码的“数学课->CS课”映射表
-    // (因为 MTH 141, 150 等节点在 Graph 视图中不可见)
-    const mathToCsMap = {
+    // ⭐ 步骤 1：硬编码的“虚拟节点 -> CS课”映射表
+    // 映射到逻辑上最相关的 *可见* CS 课程
+    const virtualToCsMap = {
+      // --- 基础数学 (Calc 1, 2) -> 映射到 CSC 171 ---
       "MATH141": "CSC171",
-      "MATH142": "CSC171", // MTH 142 也是 171 的先修
-      "MATH143": "CSC172", // MTH 143 是 172 的先修
-      "MATH150": "CSC171",
+      "MATH142": "CSC171",
       "MATH14X": "CSC171",
-      "MATH16X": "CSC172", // (MTH 16X 通常用于 172)
-      "MATH17X": "CSC172", // (MTH 17X 通常用于 172)
+      "EQUIVMTH141": "CSC171",
+      "EQUIVMTH142": "CSC171",
+      "EQUIVMTH14X": "CSC171",
+
+      // --- 高阶数学 (Discrete, Calc 3) -> 映射到 CSC 172 ---
+      "MATH150": "CSC172", // Discrete Math
+      "MATH143": "CSC172", // Calc 3
+      "MATH16X": "CSC172",
+      "MATH17X": "CSC172",
+      "EQUIVMTH150": "CSC172",
+      "EQUIVMTH143": "CSC172",
+      "EQUIVMTH16X": "CSC172",
+      "EQUIVMTH17X": "CSC172",
     };
 
-    if (mathToCsMap[normId]) {
-      const targetCourseId = mathToCsMap[normId];
+    if (virtualToCsMap[normId]) {
+      const targetCourseId = virtualToCsMap[normId];
       setActivePage("graph");
       setFocusedCourseId(targetCourseId); // 跳转到 CSC 171 或 172
       setSelectedCourse(null);
@@ -326,7 +336,7 @@ const handleJumpFromCsToGraph = (courseId) => {
       return; // 完成跳转！
     }
 
-    // ⭐ 步骤 3：检查是否为 "EQUIV-" 虚拟节点 (我们之前修复的)
+    // ⭐ 步骤 3：备用方案 - 检查 "EQUIV-" 节点 (通过 rawEdges)
     let finalId = id; // 默认ID
 
     // 查找一条边：从这个虚拟节点 -> 指向一个可见节点
@@ -337,9 +347,9 @@ const handleJumpFromCsToGraph = (courseId) => {
     });
 
     if (targetEdge) {
-      finalId = targetEdge.target.toUpperCase(); // 找到了！(例如 "CSC 160")
+      finalId = targetEdge.target.toUpperCase(); 
     } else {
-      // 备用查找：查找一条边：从一个可见节点 -> 指向这个虚拟节点
+      // 查找一条边：从一个可见节点 -> 指向这个虚拟节点
       const sourceEdge = rawEdges.find(edge => {
         const sourceId = normalizeId(edge.source);
         const targetId = normalizeId(edge.target);
@@ -347,7 +357,7 @@ const handleJumpFromCsToGraph = (courseId) => {
       });
       
       if (sourceEdge) {
-        finalId = sourceEdge.source.toUpperCase(); // 找到了！
+        finalId = sourceEdge.source.toUpperCase(); 
       }
     }
 
