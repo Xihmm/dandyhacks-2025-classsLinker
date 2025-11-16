@@ -481,10 +481,9 @@ export default function CsMindmap({ data, onCourseClick }) {
                 style={{ overflow: "hidden" }}
               >
                 <div
-                  // (新!) 使用 CSS 类
                   className="mindmap-node-prereq-text"
                 >
-                  {course.prerequisites?.length ? "Pre: " + formatPrereq(course.prerequisites) : ""}
+                  {hasPrereq ? "Pre req" : ""}
                 </div>
               </foreignObject>
 
@@ -594,6 +593,117 @@ export default function CsMindmap({ data, onCourseClick }) {
                 />
               );
               prevX = sx;
+            });
+          }
+
+          // === prereq capsules: always visible, horizontal, no line from parent ===
+          if (hasPrereq && expandedPrereqs.length > 0) {
+            const PREREQ_WIDTH = 180;
+            const baseX = courseX + 260;
+
+            expandedPrereqs.forEach((pid, pidx) => {
+              const sx = baseX + pidx * PREREQ_WIDTH;
+              const sy = courseY;
+
+              // 归一化 id，兼容 EQUIV- 前缀和空格问题
+              const normalizedPid = pid.replace(/^EQUIV-/, "").replace(/\s+/g, "");
+
+              // 特例：MATH17X → 只显示 MATH 171 / MATH 172 两个小胶囊和箭头
+              if (normalizedPid === "MATH17X") {
+                const seq = ["MATH 171", "MATH 172"];
+                seq.forEach((sub, si) => {
+                  const ssx = sx + si * 180;
+                  const ssy = sy;
+                  nodePositions[sub] = { x: ssx, y: ssy };
+
+                  elements.push(
+                    <g
+                      key={`${course.id}-prereq-${pid}-seq-${sub}`}
+                      onClick={() => onCourseClick && onCourseClick(sub)}
+                      className={`mindmap-group ${isCollapsed ? "collapsed" : ""}`}
+                      style={{ cursor: "pointer", transition: "all 0.35s ease" }}
+                    >
+                      <rect
+                        className="math-seq-node mindmap-node"
+                        x={ssx - 65}
+                        y={ssy - 25}
+                        width={130}
+                        height={50}
+                        rx={20}
+                      />
+                      <text
+                        x={ssx}
+                        y={ssy}
+                        textAnchor="middle"
+                        alignmentBaseline="middle"
+                        fill="#000"
+                        fontSize="13"
+                        fontWeight="600"
+                      >
+                        {sub}
+                      </text>
+                    </g>
+                  );
+
+                  // 序列内部箭头：171 → 172
+                  if (si > 0) {
+                    elements.push(
+                      <path
+                        key={`prereq-seq-arrow-${course.id}-${pid}-${sub}`}
+                        className={`math-seq-path ${isCollapsed ? "collapsed" : ""}`}
+                        d={`M ${ssx - 180 + 65} ${ssy} L ${ssx - 65} ${ssy}`}
+                        markerEnd="url(#arrowhead)"
+                      />
+                    );
+                  }
+                });
+                return; // 跳过画橙色 MATH17X 胶囊
+              }
+
+              // 其余 prereq → 橙色 Foundations 风格胶囊
+              const isSeqParentPrereq =
+                normalizedPid === "MATH14X" || normalizedPid === "MATH16X";
+
+              nodePositions[pid] = { x: sx, y: sy };
+
+              elements.push(
+                <g
+                  key={`${course.id}-prereq-${pid}`}
+                  onClick={
+                    isSeqParentPrereq
+                      ? undefined
+                      : () => onCourseClick && onCourseClick(pid)
+                  }
+                  className={`mindmap-group ${isCollapsed ? "collapsed" : ""}`}
+                  style={{
+                    cursor: isSeqParentPrereq ? "default" : "pointer",
+                    transition: "all 0.35s ease",
+                  }}
+                >
+                  <rect
+                    className="mindmap-node"
+                    x={sx - 90}
+                    y={sy - 30}
+                    width={180}
+                    height={60}
+                    rx={30}
+                    fill={clusterColors["Foundations"]?.bg || "#ffb066"}
+                    stroke={clusterColors["Foundations"]?.stroke || "#e68a33"}
+                    strokeWidth="1.5"
+                  />
+                  <text
+                    x={sx}
+                    y={sy}
+                    textAnchor="middle"
+                    alignmentBaseline="middle"
+                    fill="#000"
+                    fontSize="13"
+                    fontWeight="600"
+                  >
+                    {pid.replace(/^EQUIV-/, "")}
+                  </text>
+                </g>
+              );
             });
           }
         });
