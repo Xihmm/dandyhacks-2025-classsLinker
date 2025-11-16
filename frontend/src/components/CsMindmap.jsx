@@ -191,15 +191,11 @@ export default function CsMindmap({ data, onCourseClick }) {
           elements.push(
             <g
               key={course.id}
-<<<<<<< HEAD
+              onClick={() => onCourseClick && onCourseClick(course.id)}
               style={{
                 cursor: "pointer",
                 transition: "all 0.35s ease"
               }}
-=======
-              onClick={() => onCourseClick && onCourseClick(course.id)}
-              style={{ cursor: "pointer" }}
->>>>>>> feature/yuliang-Nov15_1858
             >
               <rect
                 className="mindmap-node"

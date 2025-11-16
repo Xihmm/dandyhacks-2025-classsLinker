@@ -221,13 +221,12 @@ function App() {
 
   // 搜索到特定 node
   const handleSearch = () => {
-<<<<<<< HEAD
     let key = searchText.trim().toUpperCase();
     if (!key) return;
 
     // Hide CSC160 / CSC161 from search
     if (["CSC160", "CSC 160", "CSC161", "CSC 161"].includes(key)) {
-        return;
+      return;
     }
 
     // Normalize math equivalents
@@ -237,12 +236,9 @@ function App() {
 
     // Normalize WRTG 273
     if (key === "WRTG273" || key === "WRTG 273") {
-        key = "WRTG 273 (Soph. & Juniors only)";
+      key = "WRTG 273 (Soph. & Juniors only)";
     }
 
-    setFocusedCourseId(key);
-=======
-    const key = searchText.trim();
     const normInput = normalizeId(key);
     if (!normInput) return;
 
@@ -257,12 +253,14 @@ function App() {
       return false;
     });
 
-    if (!matched) return;
-    setActivePage("graph");
-    setFocusedCourseId(matched.toUpperCase());
->>>>>>> feature/yuliang-Nov15_1858
+    if (matched) {
+      setActivePage("graph");
+      setFocusedCourseId(matched.toUpperCase());
+    } else {
+      setFocusedCourseId(key);
+    }
   };
-
+  
   // 返回“主界面” = 回到默认中心课程
   const handleReset = () => {
     setFocusedCourseId(null);    // CourseGraph 里会自动用第一门课当中心
@@ -527,5 +525,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
