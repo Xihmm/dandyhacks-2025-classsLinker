@@ -2,7 +2,17 @@ import React, { useState, useMemo } from "react";
 
 export default function CsMindmap({ data, onCourseClick }) {
   const [svgHeight, setSvgHeight] = useState(800);
-  const [collapsed, setCollapsed] = useState({});
+  const [collapsed, setCollapsed] = useState({
+    "Foundations": true,
+    "Core": true,
+    "Writing": true,
+    "Additional Math": true
+  });
+  const [mathSeqOpen, setMathSeqOpen] = useState({
+    "MATH 14X": false,
+    "MATH 16X": false,
+    "MATH 17X": false
+  });
 
   const clusterColors = {
     "Core": { bg: "#6ca0ff", stroke: "#3c6ddf" },
@@ -10,6 +20,9 @@ export default function CsMindmap({ data, onCourseClick }) {
     "Additional Math": { bg: "#6cd9c3", stroke: "#42b39d" },
     "Foundations": { bg: "#ffb066", stroke: "#e68a33" }
   };
+
+  const formatPrereq = (prereqs = []) =>
+    prereqs.map((p) => p.replace(/^EQUIV-/, "")).join(", ");
 
   // ------- STEP 1：按 cluster 分类 -------
   const clusters = useMemo(() => {
@@ -111,7 +124,7 @@ export default function CsMindmap({ data, onCourseClick }) {
     }
 
     // render clusters
-    xStart += 250;
+    xStart += 230;
 
     clusterNames.forEach((cluster, ci) => {
       const cy = clusterYPositions[ci];
@@ -181,106 +194,364 @@ export default function CsMindmap({ data, onCourseClick }) {
       );
 
       if (!collapsed[cluster]) {
-        const courses = clusters[cluster];
-        courses.forEach((course, idx) => {
-          const courseX = xStart + 280;
-          const courseY = cy + idx * COURSE_HEIGHT;
+        // Special nested rendering for Writing cluster
+        if (cluster === "Writing") {
+          // Group Writing courses by prefix
+          const writingCourses = clusters[cluster] || [];
+          const subgroupMap = { CSC: [], WRTG: [], PHIL: [] };
+          writingCourses.forEach((course) => {
+            if (/^CSC/.test(course.id)) subgroupMap.CSC.push(course);
+            else if (/^WRTG/.test(course.id)) subgroupMap.WRTG.push(course);
+            else if (/^PHIL/.test(course.id)) subgroupMap.PHIL.push(course);
+          });
+          // Layout: vertical stack of subgroups, each with vertical stack of courses
+          const subgroupNames = Object.keys(subgroupMap).filter(
+            (sg) => subgroupMap[sg].length > 0
+          );
+          // Subgroup layout parameters
+          const SUBGROUP_HEADER_HEIGHT = 55;
+          const SUBGROUP_COURSE_HEIGHT = 68;
+          const SUBGROUP_SPACING = 32;
+          // Compute subgroup Y positions
+          let subgroupY = cy - Math.max((subgroupNames.length * (SUBGROUP_HEADER_HEIGHT + SUBGROUP_SPACING)) / 2, 0) + 90;
+          // For connector from cluster to first subgroup
+          let clusterToFirstY = null;
+          subgroupNames.forEach((sg, sgi) => {
+            const sgY = subgroupY;
+            const subgroupNodeX = xStart + 250; //紫色框的X坐标
+            // Draw subgroup rectangle and label
+            elements.push(
+              <g key={`writing-subgroup-${sg}`}>
+                <rect
+                  x={subgroupNodeX - 68}
+                  y={sgY - 28}
+                  width={136}
+                  height={56}
+                  rx={22}
+                  fill="#a97ee5"
+                  stroke="#7e53b6"
+                  strokeWidth="2"
+                  style={{ transition: "all 0.35s ease" }}
+                />
+                <text
+                  x={subgroupNodeX}
+                  y={sgY}
+                  textAnchor="middle"
+                  alignmentBaseline="middle"
+                  fill="#fff"
+                  fontSize="15"
+                  fontWeight="600"
+                  style={{ letterSpacing: "2px" }}
+                >
+                  {sg}
+                </text>
+              </g>
+            );
+            // Draw connector from cluster to subgroup
+            if (sgi === 0) clusterToFirstY = sgY;
+            elements.push(
+              <path
+                key={`curve-writing-cluster-${sg}`}
+                style={{ transition: "all 0.35s ease" }}
+                d={//紫色曲线开始的坐标
+                 `M ${xStart + 70} ${cy} 
+                  C ${xStart + 150} ${cy},
+                    ${subgroupNodeX - 110} ${sgY},
+                    ${subgroupNodeX - 68} ${sgY}
+                `}
+                fill="none"
+                stroke="#b48bda"
+                strokeWidth="2"
+              />
+            );
+            // Render courses under subgroup
+            const courses = subgroupMap[sg];
+            courses.forEach((course, cidx) => {
+              const courseX = subgroupNodeX + 220;
+              const courseY = sgY + cidx * SUBGROUP_COURSE_HEIGHT;
+              nodePositions[course.id] = { x: courseX, y: courseY };
+              // Course node
+              elements.push(
+                <g
+                  key={course.id}
+                  onClick={() => onCourseClick && onCourseClick(course.id)}
+                  style={{
+                    cursor: "pointer",
+                    transition: "all 0.35s ease"
+                  }}
+                >
+                  <rect
+                    className="mindmap-node"
+                    x={courseX - 80}
+                    y={courseY - 30}
+                    width={160}
+                    height={60}
+                    rx={30}
+                    fill={clusterColors[cluster]?.bg || "#ffffff"}
+                    stroke={clusterColors[cluster]?.stroke || "#999"}
+                    strokeWidth="1.5"
+                  />
+                  <foreignObject
+                    x={courseX - 80}
+                    y={courseY - 20}
+                    width={160}
+                    height={30}
+                    style={{ overflow: "hidden" }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "11px",
+                        color: "#fff",
+                        textAlign: "center",
+                        whiteSpace: "normal",
+                        lineHeight: "12px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                        padding: "0",
+                        background: "transparent",
+                        borderRadius: "0"
+                      }}
+                    >
+                      {course.prerequisites && course.prerequisites.length > 0
+                        ? "Pre: " + formatPrereq(course.prerequisites)
+                        : ""}
+                    </div>
+                  </foreignObject>
 
-          nodePositions[course.id] = { x: courseX, y: courseY };
+                  <foreignObject
+                    x={courseX - 80}
+                    y={courseY - 5}
+                    width={160}
+                    height={36}
+                    style={{ overflow: "hidden" }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        color: "#000",
+                        textAlign: "center",
+                        whiteSpace: "normal",
+                        lineHeight: "14px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        height: "100%",
+                        padding: "0 4px",
+                        wordWrap: "break-word"
+                      }}
+                    >
+                      {course.id}
+                    </div>
+                  </foreignObject>
+                </g>
+              );
+              // Connector from subgroup to course
+              elements.push(
+                <path
+                  key={`curve-writing-${sg}-${course.id}`}
+                  style={{ transition: "all 0.35s ease" }}
+                  d={`
+                    M ${subgroupNodeX + 68} ${sgY}
+                    C ${subgroupNodeX + 130} ${sgY},
+                      ${courseX - 150} ${courseY},
+                      ${courseX - 80} ${courseY}
+                  `}
+                  fill="none"
+                  stroke="#bbb"
+                  strokeWidth="1.5"
+                />
+              );
+            });
+            // Update subgroupY for next subgroup
+            subgroupY += SUBGROUP_HEADER_HEIGHT + Math.max((courses.length - 1), 0) * SUBGROUP_COURSE_HEIGHT + SUBGROUP_SPACING;
+          });
+        } else {
+          // Default: flat course rendering
+          const courses = clusters[cluster];
+          courses.forEach((course, idx) => {
+            const isSeqParent =
+              course.id === "MATH 14X" || course.id === "MATH 16X" || course.id === "MATH 17X";
 
-          elements.push(
-            <g
-              key={course.id}
-              onClick={() => onCourseClick && onCourseClick(course.id)}
-              style={{
-                cursor: "pointer",
-                transition: "all 0.35s ease"
-              }}
-            >
-              <rect
-                className="mindmap-node"
-                x={courseX - 80}
-                y={courseY - 30}
-                width={160}
-                height={60}
-                rx={30}
-                fill={clusterColors[cluster]?.bg || "#ffffff"}
-                stroke={clusterColors[cluster]?.stroke || "#999"}
+            const courseX = xStart + 320;
+            const courseY = cy + idx * COURSE_HEIGHT;
+
+            nodePositions[course.id] = { x: courseX, y: courseY };
+
+            // render parent course box
+            elements.push(
+              <g
+                key={course.id}
+                style={{ cursor: isSeqParent ? "pointer" : "default", transition: "all 0.35s ease" }}
+                onClick={() => {
+                  if (!isSeqParent) onCourseClick && onCourseClick(course.id);
+                }}
+              >
+                <rect
+                  className="mindmap-node"
+                  x={courseX - 90}
+                  y={courseY - 30}
+                  width={180}
+                  height={60}
+                  rx={30}
+                  fill={clusterColors[cluster]?.bg || "#ffffff"}
+                  stroke={clusterColors[cluster]?.stroke || "#999"}
+                  strokeWidth="1.5"
+                />
+
+                {/* Prereq small text */}
+                <foreignObject
+                  x={courseX - 90}
+                  y={courseY - 22}
+                  width={180}
+                  height={24}
+                  style={{ overflow: "hidden" }}
+                >
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      color: "#fff",
+                      textAlign: "center",
+                      lineHeight: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      wordWrap: "break-word"
+                    }}
+                  >
+                    {course.prerequisites?.length ? "Pre: " + formatPrereq(course.prerequisites) : ""}
+                  </div>
+                </foreignObject>
+
+                {/* course ID */}
+                <foreignObject
+                  x={courseX - 90}
+                  y={courseY - 4}
+                  width={180}
+                  height={40}
+                  style={{ overflow: "hidden" }}
+                >
+                  <div
+                    style={{
+                      fontSize: "14px",
+                      color: "#000",
+                      textAlign: "center",
+                      lineHeight: "14px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      wordWrap: "break-word"
+                    }}
+                  >
+                    {course.id}
+                  </div>
+                </foreignObject>
+
+                {/* expand / collapse icon */}
+                {isSeqParent && (
+                  <text
+                    x={courseX + 70}
+                    y={courseY - 10}
+                    fontSize="22"
+                    fill="#000"
+                    style={{ cursor: "pointer" }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMathSeqOpen((p) => ({
+                        ...p,
+                        [course.id]: !p[course.id]
+                      }));
+                    }}
+                  >
+                    {mathSeqOpen[course.id] ? "-" : "+"}
+                  </text>
+                )}
+              </g>
+            );
+
+            // connecting curve from cluster
+            elements.push(
+              <path
+                key={`curve-${cluster}-${course.id}`}
+                d={`
+                  M ${xStart + 70} ${cy}
+                  C ${xStart + 140} ${cy},
+                    ${courseX - 200} ${courseY},
+                    ${courseX - 90} ${courseY}
+                `}
+                fill="none"
+                stroke="#bbb"
                 strokeWidth="1.5"
               />
-              <foreignObject
-                x={courseX - 80}
-                y={courseY - 20}
-                width={160}
-                height={30}
-                style={{ overflow: "hidden" }}
-              >
-                <div
-                  style={{
-                    fontSize: "11px",
-                    color: "#fff",
-                    textAlign: "center",
-                    whiteSpace: "normal",
-                    lineHeight: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    overflow: "hidden",
-                    padding: "0",
-                    background: "transparent",
-                    borderRadius: "0"
-                  }}
-                >
-                  {course.prerequisites && course.prerequisites.length > 0
-                    ? "Pre: " + course.prerequisites.join(", ")
-                    : ""}
-                </div>
-              </foreignObject>
+            );
 
-              <foreignObject
-                x={courseX - 80}
-                y={courseY - 5}
-                width={160}
-                height={36}
-                style={{ overflow: "hidden" }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#000",
-                    textAlign: "center",
-                    whiteSpace: "normal",
-                    lineHeight: "14px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: "100%",
-                    padding: "0 4px",
-                    wordWrap: "break-word"
-                  }}
-                >
-                  {course.id}
-                </div>
-              </foreignObject>
-            </g>
-          );
+            // === sequence expansion ===
+            if (isSeqParent && mathSeqOpen[course.id]) {
+              const seqMap = {
+                "MATH 14X": ["MATH 141", "MATH 142", "MATH 143"],
+                "MATH 16X": ["MATH 161", "MATH 162"],
+                "MATH 17X": ["MATH 171", "MATH 172"]
+              };
+              const seq = seqMap[course.id] || [];
 
-          elements.push(
-            <path
-              key={`curve-${cluster}-${course.id}`}
-              style={{ transition: "all 0.35s ease" }}
-              d={`
-                M ${xStart + 70} ${cy}
-                C ${xStart + 150} ${cy},
-                  ${courseX - 150} ${courseY},
-                  ${courseX - 80} ${courseY}
-              `}
-              fill="none"
-              stroke="#bbb"
-              strokeWidth="1.5"
-            />
-          );
-        });
+              // Compute prevX before sequence
+              let prevX = courseX + 120;
+
+              seq.forEach((sub, si) => {
+                const sx = courseX + 260 + si * 150;
+                const sy = courseY;
+
+                nodePositions[sub] = { x: sx, y: sy };
+
+                elements.push(
+                  <g
+                    key={`${course.id}-seq-${sub}`}
+                    onClick={() => onCourseClick && onCourseClick(sub)}
+                    style={{ cursor: "pointer", transition: "all 0.35s ease" }}
+                  >
+                    <rect
+                      x={sx - 65}
+                      y={sy - 25}
+                      width={130}
+                      height={50}
+                      rx={20}
+                      fill="#ffd2a6"
+                      stroke="#c78b53"
+                      strokeWidth="1.5"
+                    />
+                    <text
+                      x={sx}
+                      y={sy}
+                      textAnchor="middle"
+                      alignmentBaseline="middle"
+                      fill="#000"
+                      fontSize="13"
+                      fontWeight="600"
+                    >
+                      {sub}
+                    </text>
+                  </g>
+                );
+
+                // Draw short segment arrow from prevX to current sequence node
+                elements.push(
+                  <path
+                    key={`seq-arrow1-${course.id}-${sub}`}
+                    d={`M ${prevX + 65} ${sy} L ${sx - 65} ${sy}`}
+                    fill="none"
+                    stroke="#d8a875"
+                    strokeWidth="2"
+                    markerEnd="url(#arrowhead)"
+                  />
+                );
+
+                // Update prevX for next segment
+                prevX = sx;
+              });
+            }
+          });
+        }
       }
     });
 
