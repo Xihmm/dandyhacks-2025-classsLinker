@@ -7,6 +7,7 @@ export default function PlanFloatingPanel({
   onRemove,
   onReorder,
   onExternalDrop,
+  onClear,
 }) {
   const [dragIndex, setDragIndex] = useState(null);
 
@@ -43,6 +44,8 @@ export default function PlanFloatingPanel({
     if (!id) return;
     onExternalDrop(id);
   };
+
+  const hasCourses = Array.isArray(courses) && courses.length > 0;
 
   // 折叠状态：只显示一个小按钮
   if (!visible) {
@@ -106,18 +109,35 @@ export default function PlanFloatingPanel({
         <div style={{ fontSize: "14px", fontWeight: 600 }}>
           My Plan
         </div>
-        <button
-          onClick={onToggleVisible}
-          style={{
-            border: "none",
-            background: "transparent",
-            color: "#e5e7eb",
-            fontSize: "14px",
-            cursor: "pointer",
-          }}
-        >
-          hide
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <button
+            onClick={() => onClear && onClear()}
+            disabled={!hasCourses}
+            style={{
+              border: "none",
+              borderRadius: "999px",
+              padding: "2px 8px",
+              fontSize: "12px",
+              background: hasCourses ? "#f9fafb" : "#4b5563",
+              color: "#111827",
+              cursor: hasCourses ? "pointer" : "default",
+            }}
+          >
+            Clear all
+          </button>
+          <button
+            onClick={onToggleVisible}
+            style={{
+              border: "none",
+              background: "transparent",
+              color: "#e5e7eb",
+              fontSize: "14px",
+              cursor: "pointer",
+            }}
+          >
+            hide
+          </button>
+        </div>
       </div>
 
       {/* 列表区域 */}

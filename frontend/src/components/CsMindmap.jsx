@@ -13,6 +13,7 @@ export default function CsMindmap({ data, onCourseClick }) {
     "MATH 16X": false,
     "MATH 17X": false
   });
+  const [writingSubOpen, setWritingSubOpen] = useState({});
 
   const clusterColors = {
     "Core": { bg: "#6ca0ff", stroke: "#3c6ddf" },
@@ -23,6 +24,9 @@ export default function CsMindmap({ data, onCourseClick }) {
 
   const formatPrereq = (prereqs = []) =>
     prereqs.map((p) => p.replace(/^EQUIV-/, "")).join(", ");
+
+  const expandPrereqList = (prereqs = []) =>
+    prereqs.map((p) => p.replace(/^EQUIV-/, ""));
 
   // ------- STEP 1：按 cluster 分类 -------
   const clusters = useMemo(() => {
@@ -132,7 +136,13 @@ export default function CsMindmap({ data, onCourseClick }) {
       nodePositions[`cluster_${cluster}`] = { x: xStart, y: cy };
 
       elements.push(
-        <g key={cluster}>
+        <g
+          key={cluster}
+          style={{ cursor: "pointer" }}
+          onClick={() =>
+            setCollapsed((p) => ({ ...p, [cluster]: !p[cluster] }))
+          }
+        >
           <rect
             className="mindmap-cluster-label"
             x={xStart - 90}
@@ -144,19 +154,22 @@ export default function CsMindmap({ data, onCourseClick }) {
             stroke={clusterColors[cluster]?.stroke || "#3c6ddf"}
             strokeWidth="2"
           />
-          <text x={xStart} y={cy} textAnchor="middle"
-                alignmentBaseline="middle" fill="#fff" fontSize="14">
+          <text
+            x={xStart}
+            y={cy}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            fill="#fff"
+            fontSize="14"
+          >
             {cluster}
           </text>
 
+          {/* cluster expand / collapse icon */}
           <text
             x={xStart + 80}
             y={cy}
             fontSize="20"
-            cursor="pointer"
-            onClick={() =>
-              setCollapsed((p) => ({ ...p, [cluster]: !p[cluster] }))
-            }
           >
             {collapsed[cluster] ? "+" : "-"}
           </text>
@@ -219,9 +232,21 @@ export default function CsMindmap({ data, onCourseClick }) {
           subgroupNames.forEach((sg, sgi) => {
             const sgY = subgroupY;
             const subgroupNodeX = xStart + 250; //紫色框的X坐标
-            // Draw subgroup rectangle and label
+            const courses = subgroupMap[sg];
+            const isOpen = writingSubOpen[sg] === true;
+
+            // Draw subgroup rectangle and label (clickable parent)
             elements.push(
-              <g key={`writing-subgroup-${sg}`}>
+              <g
+                key={`writing-subgroup-${sg}`}
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  setWritingSubOpen((p) => ({
+                    ...p,
+                    [sg]: !isOpen,
+                  }))
+                }
+              >
                 <rect
                   x={subgroupNodeX - 68}
                   y={sgY - 28}
@@ -245,8 +270,17 @@ export default function CsMindmap({ data, onCourseClick }) {
                 >
                   {sg}
                 </text>
+                {/* subgroup expand / collapse icon */}
+                <text
+                  x={subgroupNodeX + 60}
+                  y={sgY}
+                  fontSize="18"
+                >
+                  {isOpen ? "-" : "+"}
+                </text>
               </g>
             );
+
             // Draw connector from cluster to subgroup
             if (sgi === 0) clusterToFirstY = sgY;
             elements.push(
@@ -264,108 +298,235 @@ export default function CsMindmap({ data, onCourseClick }) {
                 strokeWidth="2"
               />
             );
-            // Render courses under subgroup
-            const courses = subgroupMap[sg];
-            courses.forEach((course, cidx) => {
-              const courseX = subgroupNodeX + 220;
-              const courseY = sgY + cidx * SUBGROUP_COURSE_HEIGHT;
-              nodePositions[course.id] = { x: courseX, y: courseY };
-              // Course node
-              elements.push(
-                <g
-                  key={course.id}
-                  onClick={() => onCourseClick && onCourseClick(course.id)}
-                  style={{
-                    cursor: "pointer",
-                    transition: "all 0.35s ease"
-                  }}
-                >
-                  <rect
-                    className="mindmap-node"
-                    x={courseX - 80}
-                    y={courseY - 30}
-                    width={160}
-                    height={60}
-                    rx={30}
-                    fill={clusterColors[cluster]?.bg || "#ffffff"}
-                    stroke={clusterColors[cluster]?.stroke || "#999"}
+
+            // Render courses under subgroup only if open
+            if (isOpen) {
+              courses.forEach((course, cidx) => {
+                const courseX = subgroupNodeX + 220;
+                const courseY = sgY + cidx * SUBGROUP_COURSE_HEIGHT;
+                nodePositions[course.id] = { x: courseX, y: courseY };
+
+                const hasPrereq =
+                  course.prerequisites && course.prerequisites.length > 0;
+                const expandedPrereqs = hasPrereq
+                  ? expandPrereqList(course.prerequisites)
+                  : [];
+
+                // Course node
+                elements.push(
+                  <g
+                    key={course.id}
+                    onClick={() => {
+                      onCourseClick && onCourseClick(course.id);
+                    }}
+                    style={{
+                      cursor: "pointer",
+                      transition: "all 0.35s ease"
+                    }}
+                  >
+                    <rect
+                      className="mindmap-node"
+                      x={courseX - 80}
+                      y={courseY - 30}
+                      width={160}
+                      height={60}
+                      rx={30}
+                      fill={clusterColors[cluster]?.bg || "#ffffff"}
+                      stroke={clusterColors[cluster]?.stroke || "#999"}
+                      strokeWidth="1.5"
+                    />
+                    <foreignObject
+                      x={courseX - 80}
+                      y={courseY - 20}
+                      width={160}
+                      height={30}
+                      style={{ overflow: "hidden" }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "11px",
+                          color: "#fff",
+                          textAlign: "center",
+                          whiteSpace: "normal",
+                          lineHeight: "12px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          overflow: "hidden",
+                          padding: "0",
+                          background: "transparent",
+                          borderRadius: "0"
+                        }}
+                      >
+                        {hasPrereq
+                          ? "Pre: " + formatPrereq(course.prerequisites)
+                          : ""}
+                      </div>
+                    </foreignObject>
+
+                    <foreignObject
+                      x={courseX - 80}
+                      y={courseY - 5}
+                      width={160}
+                      height={36}
+                      style={{ overflow: "hidden" }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "12px",
+                          color: "#000",
+                          textAlign: "center",
+                          whiteSpace: "normal",
+                          lineHeight: "14px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          height: "100%",
+                          padding: "0 4px",
+                          wordWrap: "break-word"
+                        }}
+                      >
+                        {course.id}
+                      </div>
+                    </foreignObject>
+                  </g>
+                );
+                // Connector from subgroup to course
+                elements.push(
+                  <path
+                    key={`curve-writing-${sg}-${course.id}`}
+                    style={{ transition: "all 0.35s ease" }}
+                    d={`
+                      M ${subgroupNodeX + 68} ${sgY}
+                      C ${subgroupNodeX + 130} ${sgY},
+                        ${courseX - 150} ${courseY},
+                        ${courseX - 80} ${courseY}
+                    `}
+                    fill="none"
+                    stroke="#bbb"
                     strokeWidth="1.5"
                   />
-                  <foreignObject
-                    x={courseX - 80}
-                    y={courseY - 20}
-                    width={160}
-                    height={30}
-                    style={{ overflow: "hidden" }}
-                  >
-                    <div
-                      style={{
-                        fontSize: "11px",
-                        color: "#fff",
-                        textAlign: "center",
-                        whiteSpace: "normal",
-                        lineHeight: "12px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        overflow: "hidden",
-                        padding: "0",
-                        background: "transparent",
-                        borderRadius: "0"
-                      }}
-                    >
-                      {course.prerequisites && course.prerequisites.length > 0
-                        ? "Pre: " + formatPrereq(course.prerequisites)
-                        : ""}
-                    </div>
-                  </foreignObject>
+                );
 
-                  <foreignObject
-                    x={courseX - 80}
-                    y={courseY - 5}
-                    width={160}
-                    height={36}
-                    style={{ overflow: "hidden" }}
-                  >
-                    <div
-                      style={{
-                        fontSize: "12px",
-                        color: "#000",
-                        textAlign: "center",
-                        whiteSpace: "normal",
-                        lineHeight: "14px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "100%",
-                        padding: "0 4px",
-                        wordWrap: "break-word"
-                      }}
-                    >
-                      {course.id}
-                    </div>
-                  </foreignObject>
-                </g>
-              );
-              // Connector from subgroup to course
-              elements.push(
-                <path
-                  key={`curve-writing-${sg}-${course.id}`}
-                  style={{ transition: "all 0.35s ease" }}
-                  d={`
-                    M ${subgroupNodeX + 68} ${sgY}
-                    C ${subgroupNodeX + 130} ${sgY},
-                      ${courseX - 150} ${courseY},
-                      ${courseX - 80} ${courseY}
-                  `}
-                  fill="none"
-                  stroke="#bbb"
-                  strokeWidth="1.5"
-                />
-              );
-            });
-            // Update subgroupY for next subgroup
-            subgroupY += SUBGROUP_HEADER_HEIGHT + Math.max((courses.length - 1), 0) * SUBGROUP_COURSE_HEIGHT + SUBGROUP_SPACING;
+                // Always show prereqs (no collapse/expand, no arrow from parent)
+                if (hasPrereq && expandedPrereqs.length > 0) {
+                  const PREREQ_WIDTH = 180;
+                  const baseX = courseX + 260;
+                  expandedPrereqs.forEach((pid, pidx) => {
+                    const sx = baseX + pidx * PREREQ_WIDTH;
+                    const sy = courseY;
+
+                    // Normalize pid for special-case handling
+                    const normalizedPid = pid.replace(/^EQUIV-/, "").replace(/\s+/g, "");
+
+                    nodePositions[pid] = { x: sx, y: sy };
+
+                    // prereq capsule styled like Foundations courses
+                    const isSeqParentPrereq =
+                      normalizedPid === "MATH14X" || normalizedPid === "MATH16X";
+
+                    // Special-case: if prereq is "MATH17X" (with or without space / EQUIV-), render only 171->172 sequence here (no orange capsule)
+                    if (normalizedPid === "MATH17X") {
+                      const seq = ["MATH 171", "MATH 172"];
+                      let prevSeqCenterX = null;
+                      seq.forEach((sub, si) => {
+                        const ssx = sx + si * 180;
+                        const ssy = sy;
+                        nodePositions[sub] = { x: ssx, y: ssy };
+                        elements.push(
+                          <g
+                            key={`${course.id}-prereq-${pid}-seq-${sub}`}
+                            onClick={() => onCourseClick && onCourseClick(sub)}
+                            style={{ cursor: "pointer", transition: "all 0.35s ease" }}
+                          >
+                            <rect
+                              x={ssx - 65}
+                              y={ssy - 25}
+                              width={130}
+                              height={50}
+                              rx={20}
+                              fill="#ffd2a6"
+                              stroke="#c78b53"
+                              strokeWidth="1.5"
+                            />
+                            <text
+                              x={ssx}
+                              y={ssy}
+                              textAnchor="middle"
+                              alignmentBaseline="middle"
+                              fill="#000"
+                              fontSize="13"
+                              fontWeight="600"
+                            >
+                              {sub}
+                            </text>
+                          </g>
+                        );
+                        // Draw arrow segment:
+                        if (si > 0) {
+                          elements.push(
+                            <path
+                              key={`prereq-seq-arrow-writing-${course.id}-${pid}-${sub}`}
+                              d={`M ${ssx - 180 + 65} ${ssy} L ${ssx - 65} ${ssy}`}
+                              fill="none"
+                              stroke="#d8a875"
+                              strokeWidth="2"
+                              markerEnd="url(#arrowhead)"
+                            />
+                          );
+                        }
+                        prevSeqCenterX = ssx;
+                      });
+                      return;
+                    }
+
+                    elements.push(
+                      <g
+                        key={`${course.id}-prereq-${pid}`}
+                        onClick={
+                          isSeqParentPrereq
+                            ? undefined
+                            : () => onCourseClick && onCourseClick(pid)
+                        }
+                        style={{
+                          cursor: isSeqParentPrereq ? "default" : "pointer",
+                          transition: "all 0.35s ease",
+                        }}
+                      >
+                        <rect
+                          x={sx - 90}
+                          y={sy - 30}
+                          width={180}
+                          height={60}
+                          rx={30}
+                          fill={clusterColors["Foundations"]?.bg || "#ffb066"}
+                          stroke={clusterColors["Foundations"]?.stroke || "#e68a33"}
+                          strokeWidth="1.5"
+                        />
+                        <text
+                          x={sx}
+                          y={sy}
+                          textAnchor="middle"
+                          alignmentBaseline="middle"
+                          fill="#000"
+                          fontSize="13"
+                          fontWeight="600"
+                        >
+                          {pid}
+                        </text>
+                      </g>
+                    );
+                  });
+                }
+              });
+            }
+
+            // Update subgroupY for next subgroup; if collapsed, ignore course height
+            const visibleCount = isOpen ? courses.length : 0;
+            subgroupY +=
+              SUBGROUP_HEADER_HEIGHT +
+              Math.max(visibleCount - 1, 0) * SUBGROUP_COURSE_HEIGHT +
+              SUBGROUP_SPACING;
           });
         } else {
           // Default: flat course rendering
@@ -379,15 +540,28 @@ export default function CsMindmap({ data, onCourseClick }) {
 
             nodePositions[course.id] = { x: courseX, y: courseY };
 
+          const hasPrereq =
+            course.prerequisites && course.prerequisites.length > 0;
+          const expandedPrereqs = hasPrereq
+            ? expandPrereqList(course.prerequisites)
+            : [];
+
             // render parent course box
-            elements.push(
-              <g
-                key={course.id}
-                style={{ cursor: isSeqParent ? "pointer" : "default", transition: "all 0.35s ease" }}
-                onClick={() => {
-                  if (!isSeqParent) onCourseClick && onCourseClick(course.id);
-                }}
-              >
+          elements.push(
+            <g
+              key={course.id}
+              style={{ cursor: "pointer", transition: "all 0.35s ease" }}
+              onClick={() => {
+                if (isSeqParent) {
+                  setMathSeqOpen((p) => ({
+                    ...p,
+                    [course.id]: !p[course.id],
+                  }));
+                } else {
+                  onCourseClick && onCourseClick(course.id);
+                }
+              }}
+            >
                 <rect
                   className="mindmap-node"
                   x={courseX - 90}
@@ -417,10 +591,12 @@ export default function CsMindmap({ data, onCourseClick }) {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      wordWrap: "break-word"
+                      wordWrap: "break-word",
                     }}
                   >
-                    {course.prerequisites?.length ? "Pre: " + formatPrereq(course.prerequisites) : ""}
+                    {hasPrereq
+                      ? "Pre: " + formatPrereq(course.prerequisites)
+                      : ""}
                   </div>
                 </foreignObject>
 
@@ -441,32 +617,22 @@ export default function CsMindmap({ data, onCourseClick }) {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      wordWrap: "break-word"
+                      wordWrap: "break-word",
                     }}
                   >
                     {course.id}
                   </div>
                 </foreignObject>
 
-                {/* expand / collapse icon */}
-                {isSeqParent && (
-                  <text
-                    x={courseX + 70}
-                    y={courseY - 10}
-                    fontSize="22"
-                    fill="#000"
-                    style={{ cursor: "pointer" }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setMathSeqOpen((p) => ({
-                        ...p,
-                        [course.id]: !p[course.id]
-                      }));
-                    }}
-                  >
-                    {mathSeqOpen[course.id] ? "-" : "+"}
-                  </text>
-                )}
+            {isSeqParent && (
+              <text
+                x={courseX + 70}
+                y={courseY}
+                fontSize="20"
+              >
+                {mathSeqOpen[course.id] ? "-" : "+"}
+              </text>
+            )}
               </g>
             );
 
@@ -486,6 +652,116 @@ export default function CsMindmap({ data, onCourseClick }) {
               />
             );
 
+          // Always show prereqs (no collapse/expand, no arrow from parent)
+          if (hasPrereq && expandedPrereqs.length > 0) {
+            const PREREQ_WIDTH = 180;
+            const baseX = courseX + 260;
+            expandedPrereqs.forEach((pid, pidx) => {
+              const sx = baseX + pidx * PREREQ_WIDTH;
+              const sy = courseY;
+
+              // Normalize pid for special-case handling
+              const normalizedPid = pid.replace(/^EQUIV-/, "").replace(/\s+/g, "");
+
+              nodePositions[pid] = { x: sx, y: sy };
+
+              const isSeqParentPrereq =
+                normalizedPid === "MATH14X" || normalizedPid === "MATH16X";
+
+              // Special-case: if prereq is "MATH17X" (with or without space / EQUIV-), render only 171->172 sequence here (no orange capsule)
+              if (normalizedPid === "MATH17X") {
+                const seq = ["MATH 171", "MATH 172"];
+                let prevSeqCenterX = null;
+                seq.forEach((sub, si) => {
+                  const ssx = sx + si * 180;
+                  const ssy = sy;
+                  nodePositions[sub] = { x: ssx, y: ssy };
+                  elements.push(
+                    <g
+                      key={`${course.id}-prereq-${pid}-seq-${sub}`}
+                      onClick={() => onCourseClick && onCourseClick(sub)}
+                      style={{ cursor: "pointer", transition: "all 0.35s ease" }}
+                    >
+                      <rect
+                        x={ssx - 65}
+                        y={ssy - 25}
+                        width={130}
+                        height={50}
+                        rx={20}
+                        fill="#ffd2a6"
+                        stroke="#c78b53"
+                        strokeWidth="1.5"
+                      />
+                      <text
+                        x={ssx}
+                        y={ssy}
+                        textAnchor="middle"
+                        alignmentBaseline="middle"
+                        fill="#000"
+                        fontSize="13"
+                        fontWeight="600"
+                      >
+                        {sub}
+                      </text>
+                    </g>
+                  );
+                  // Draw arrow segment:
+                  if (si > 0) {
+                    elements.push(
+                      <path
+                        key={`prereq-seq-arrow-${course.id}-${pid}-${sub}`}
+                        d={`M ${ssx - 180 + 65} ${ssy} L ${ssx - 65} ${ssy}`}
+                        fill="none"
+                        stroke="#d8a875"
+                        strokeWidth="2"
+                        markerEnd="url(#arrowhead)"
+                      />
+                    );
+                  }
+                  prevSeqCenterX = ssx;
+                });
+                return;
+              }
+
+              elements.push(
+                <g
+                  key={`${course.id}-prereq-${pid}`}
+                  onClick={
+                    isSeqParentPrereq
+                      ? undefined
+                      : () => onCourseClick && onCourseClick(pid)
+                  }
+                  style={{
+                    cursor: isSeqParentPrereq ? "default" : "pointer",
+                    transition: "all 0.35s ease",
+                  }}
+                >
+                  <rect
+                    x={sx - 90}
+                    y={sy - 30}
+                    width={180}
+                    height={60}
+                    rx={30}
+                    fill={clusterColors["Foundations"]?.bg || "#ffb066"}
+                    stroke={clusterColors["Foundations"]?.stroke || "#e68a33"}
+                    strokeWidth="1.5"
+                  />
+                  <text
+                    x={sx}
+                    y={sy}
+                    textAnchor="middle"
+                    alignmentBaseline="middle"
+                    fill="#000"
+                    fontSize="13"
+                    fontWeight="600"
+                  >
+                    {pid}
+                  </text>
+                </g>
+              );
+            });
+          }
+
             // === sequence expansion ===
             if (isSeqParent && mathSeqOpen[course.id]) {
               const seqMap = {
@@ -495,11 +771,11 @@ export default function CsMindmap({ data, onCourseClick }) {
               };
               const seq = seqMap[course.id] || [];
 
-              // Compute prevX before sequence
-              let prevX = courseX + 120;
+              // prevX will track the center X of the previous sequence capsule
+              let prevX = null;
 
               seq.forEach((sub, si) => {
-                const sx = courseX + 260 + si * 150;
+                const sx = courseX + 260 + si * 220;
                 const sy = courseY;
 
                 nodePositions[sub] = { x: sx, y: sy };
@@ -534,11 +810,16 @@ export default function CsMindmap({ data, onCourseClick }) {
                   </g>
                 );
 
-                // Draw short segment arrow from prevX to current sequence node
+                // Draw arrow segment:
+                //  - for the first child, from the parent capsule's right edge
+                //  - for later children, from the previous child capsule
+                const startX =
+                  si === 0 ? courseX + 90 : prevX + 65; // parent right edge or previous child right edge
+
                 elements.push(
                   <path
                     key={`seq-arrow1-${course.id}-${sub}`}
-                    d={`M ${prevX + 65} ${sy} L ${sx - 65} ${sy}`}
+                    d={`M ${startX} ${sy} L ${sx - 65} ${sy}`}
                     fill="none"
                     stroke="#d8a875"
                     strokeWidth="2"
@@ -546,7 +827,7 @@ export default function CsMindmap({ data, onCourseClick }) {
                   />
                 );
 
-                // Update prevX for next segment
+                // Update prevX for next segment (center of this capsule)
                 prevX = sx;
               });
             }
