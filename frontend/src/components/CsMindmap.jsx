@@ -5,12 +5,12 @@ const MindmapStyles = () => (
   <style>{`
     /* --- 动画类 (Animation) --- */
     
-    .mindmap-group, .mindmap-path {
+    .mindmap-group, .mindmap-path, .mindmap-subgroup-label {
       /* 这是“炫酷”动画的核心 */
       transition: all 0.35s ease-out;
     }
 
-    .mindmap-group.collapsed, .mindmap-path.collapsed {
+    .mindmap-group.collapsed, .mindmap-path.collapsed, .mindmap-subgroup-label.collapsed {
       /* 当折叠时: 淡出 + 向左微移 */
       opacity: 0;
       transform: translateX(-20px);
@@ -47,7 +47,7 @@ const MindmapStyles = () => (
     .mindmap-node-text-wrapper {
       /* 节点内“课程ID”的文本 (e.g., "CSC 172") */
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      font-size: 13px; /* 稍微调大一点 */
+      font-size: 13px;
       color: #000; /* 保持你原来的黑色 */
       text-align: center;
       white-space: normal;
@@ -78,11 +78,6 @@ const MindmapStyles = () => (
       filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1));
     }
     
-    .mindmap-subgroup-label {
-      /* Writing 子标签 (e.g., "CSC") */
-      transition: all 0.35s ease;
-    }
-
     .math-seq-node {
       /* "MATH 141" 等子节点 */
       fill: #ffd2a6;
@@ -101,7 +96,18 @@ const MindmapStyles = () => (
 
 export default function CsMindmap({ data, onCourseClick }) {
   const [svgHeight, setSvgHeight] = useState(800);
-  const [collapsed, setCollapsed] = useState({});
+  // (修复!) 恢复你原来的默认折叠状态
+  const [collapsed, setCollapsed] = useState({
+    "Foundations": true,
+    "Core": true,
+    "Writing": true,
+    "Additional Math": true
+  });
+  const [mathSeqOpen, setMathSeqOpen] = useState({
+    "MATH 14X": false,
+    "MATH 16X": false,
+    "MATH 17X": false
+  });
 
   const clusterColors = {
     "Core": { bg: "#6ca0ff", stroke: "#3c6ddf" },
@@ -110,13 +116,16 @@ export default function CsMindmap({ data, onCourseClick }) {
     "Foundations": { bg: "#ffb066", stroke: "#e68a33" }
   };
 
+  // (修复!) 恢复你原来的 formatPrereq 函数
+  const formatPrereq = (prereqs = []) =>
+    prereqs.map((p) => p.replace(/^EQUIV-/, "")).join(", ");
+
   // ------- STEP 1：按 cluster 分类 -------
   const clusters = useMemo(() => {
-    // Swap "Writing" and "MathReq" order for visual arrangement
+    // (保留你原来的逻辑)
     const allowed = ["Core", "Writing", "MathReq", "Foundations"];
     const map = {};
     data.nodes.forEach((n) => {
-      // Skip nodes with id "CSC160", "CSC 160", "CSC161", or "CSC 161"
       if (
         n.id === "CSC160" ||
         n.id === "CSC 160" ||
@@ -124,17 +133,13 @@ export default function CsMindmap({ data, onCourseClick }) {
         n.id === "CSC 161"
       )
         return;
-      // Clone node to avoid mutating original data
       let node = { ...n };
-      // Renaming for EQUIV-MATH14X, 16X, 17X
       if (node.id === "EQUIV-MATH14X") node.id = "MATH 14X";
       if (node.id === "EQUIV-MATH16X") node.id = "MATH 16X";
       if (node.id === "EQUIV-MATH17X") node.id = "MATH 17X";
       let c = node.cluster || "Other";
       if (!allowed.includes(c)) return;
-      // Rename "MathReq" cluster to "Additional Math"
       if (c === "MathReq") c = "Additional Math";
-      // Special modification for Writing cluster: WRTG273 and WRTG 273
       if (
         c === "Writing" &&
         (node.id === "WRTG273" || node.id === "WRTG 273")
@@ -149,14 +154,13 @@ export default function CsMindmap({ data, onCourseClick }) {
 
   const clusterNames = Object.keys(clusters);
 
-  // ------- STEP 2：记录节点坐标，用于画箭头 -------
+  // ------- STEP 2：记录节点坐标 -------
   const nodePositions = {};
 
   // ------- STEP 3：生成 SVG 渲染 -------
   const renderMap = () => {
     let xStart = 140;
     const yRoot = 300;
-
     const elements = [];
 
     // root node
@@ -173,44 +177,36 @@ export default function CsMindmap({ data, onCourseClick }) {
 
     nodePositions["CS_MAJOR"] = { x: xStart, y: yRoot };
 
-    // ===== dynamic cluster spacing (collapsible, auto-avoid overlap) =====
+    // ===== dynamic cluster spacing (保留你原来的逻辑) =====
     const COURSE_HEIGHT = 70;
     const CLUSTER_MIN_HEIGHT = 80;
     const CLUSTER_HEADER_HEIGHT = 80;
 
-    // compute actual height of each cluster depending on collapse state
     const clusterHeights = clusterNames.map((cluster) => {
       const expanded = !collapsed[cluster];
       const courseCount = clusters[cluster]?.length ?? 0;
-
       if (!expanded) {
-        // collapsed = compact height
         return CLUSTER_MIN_HEIGHT;
       }
-
-      // expanded = height based on visible courses
       return Math.max(
         CLUSTER_MIN_HEIGHT,
         CLUSTER_HEADER_HEIGHT + courseCount * COURSE_HEIGHT
       );
     });
 
-    // compute Y offsets, ensuring no overlap
     const clusterYPositions = [];
     let cursorY = 80;
-
     clusterHeights.forEach((h) => {
       clusterYPositions.push(cursorY);
-      cursorY += h + 40; // 40px spacer to avoid boundary touching
+      cursorY += h + 40;
     });
 
-    // avoid infinite re-render loop
     if (svgHeight !== cursorY + 400) {
       setSvgHeight(cursorY + 400);
     }
 
     // render clusters
-    xStart += 250;
+    xStart += 230; // (修复!) 恢复你原来的 230
 
     clusterNames.forEach((cluster, ci) => {
       const cy = clusterYPositions[ci];
@@ -237,7 +233,6 @@ export default function CsMindmap({ data, onCourseClick }) {
                 alignmentBaseline="middle" fill="#fff" fontSize="14">
             {cluster}
           </text>
-
           <text
             x={xStart + 80}
             y={cy}
@@ -277,71 +272,14 @@ export default function CsMindmap({ data, onCourseClick }) {
               ${xStart - 150} ${cy},
               ${xStart - 90} ${cy}
           `}
-          // (已删除) fill, stroke, strokeWidth
         />
       );
 
-<<<<<<< Updated upstream
-      if (!collapsed[cluster]) {
-        const courses = clusters[cluster];
-        courses.forEach((course, idx) => {
-          const courseX = xStart + 280;
-          const courseY = cy + idx * COURSE_HEIGHT;
-
-          nodePositions[course.id] = { x: courseX, y: courseY };
-
-          elements.push(
-            <g
-              key={course.id}
-              onClick={() => onCourseClick && onCourseClick(course.id)}
-              style={{
-                cursor: "pointer",
-                transition: "all 0.35s ease"
-              }}
-            >
-              <rect
-                className="mindmap-node"
-                x={courseX - 80}
-                y={courseY - 30}
-                width={160}
-                height={60}
-                rx={30}
-                fill={clusterColors[cluster]?.bg || "#ffffff"}
-                stroke={clusterColors[cluster]?.stroke || "#999"}
-                strokeWidth="1.5"
-              />
-              <foreignObject
-                x={courseX - 80}
-                y={courseY - 20}
-                width={160}
-                height={30}
-                style={{ overflow: "hidden" }}
-              >
-                <div
-                  style={{
-                    fontSize: "11px",
-                    color: "#fff",
-                    textAlign: "center",
-                    whiteSpace: "normal",
-                    lineHeight: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    overflow: "hidden",
-                    padding: "0",
-                    background: "transparent",
-                    borderRadius: "0"
-                  }}
-                >
-                  {course.prerequisites && course.prerequisites.length > 0
-                    ? "Pre: " + course.prerequisites.join(", ")
-                    : ""}
-=======
       // (新!) 删除了 if (!collapsed[cluster]) 检查
       
       // Special nested rendering for Writing cluster
       if (cluster === "Writing") {
-        // ... (subgroup 逻辑不变) ...
+        // (保留你原来的 Writing 逻辑)
         const writingCourses = clusters[cluster] || [];
         const subgroupMap = { CSC: [], WRTG: [], PHIL: [] };
         writingCourses.forEach((course) => {
@@ -365,10 +303,9 @@ export default function CsMindmap({ data, onCourseClick }) {
             <g 
               key={`writing-subgroup-${sg}`}
               // (新!) 添加动画类
-              className={`mindmap-group ${isCollapsed ? "collapsed" : ""}`}
+              className={`mindmap-subgroup-label ${isCollapsed ? "collapsed" : ""}`}
             >
               <rect
-                className="mindmap-subgroup-label" // (新!) 使用 CSS 类
                 x={subgroupNodeX - 68}
                 y={sgY - 28}
                 width={136}
@@ -377,7 +314,6 @@ export default function CsMindmap({ data, onCourseClick }) {
                 fill="#a97ee5"
                 stroke="#7e53b6"
                 strokeWidth="2"
-                // (已删除) style prop
               />
               <text
                 x={subgroupNodeX}
@@ -405,7 +341,6 @@ export default function CsMindmap({ data, onCourseClick }) {
                   ${subgroupNodeX - 110} ${sgY},
                   ${subgroupNodeX - 68} ${sgY}
               `}
-              // (已删除) style, fill, stroke, strokeWidth
             />
           );
           
@@ -445,7 +380,7 @@ export default function CsMindmap({ data, onCourseClick }) {
                     className="mindmap-node-prereq-text"
                   >
                     {course.prerequisites && course.prerequisites.length > 0
-                      ? "Pre: " + formatPrereq(course.prerequisites)
+                      ? "Pre: " + formatPrereq(course.prerequisites) // (修复!) 使用 formatPrereq
                       : ""}
                   </div>
                 </foreignObject>
@@ -477,14 +412,13 @@ export default function CsMindmap({ data, onCourseClick }) {
                     ${courseX - 150} ${courseY},
                     ${courseX - 80} ${courseY}
                 `}
-                // (已删除) style, fill, stroke, strokeWidth
               />
             );
           });
           subgroupY += SUBGROUP_HEADER_HEIGHT + Math.max((courses.length - 1), 0) * SUBGROUP_COURSE_HEIGHT + SUBGROUP_SPACING;
         });
       } else {
-        // Default: flat course rendering
+        // Default: flat course rendering (保留你原来的逻辑)
         const courses = clusters[cluster];
         courses.forEach((course, idx) => {
           const isSeqParent =
@@ -529,33 +463,10 @@ export default function CsMindmap({ data, onCourseClick }) {
                   className="mindmap-node-prereq-text"
                 >
                   {course.prerequisites?.length ? "Pre: " + formatPrereq(course.prerequisites) : ""}
->>>>>>> Stashed changes
                 </div>
               </foreignObject>
 
               <foreignObject
-<<<<<<< Updated upstream
-                x={courseX - 80}
-                y={courseY - 5}
-                width={160}
-                height={36}
-                style={{ overflow: "hidden" }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#000",
-                    textAlign: "center",
-                    whiteSpace: "normal",
-                    lineHeight: "14px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: "100%",
-                    padding: "0 4px",
-                    wordWrap: "break-word"
-                  }}
-=======
                 x={courseX - 90}
                 y={courseY - 4}
                 width={180}
@@ -566,13 +477,10 @@ export default function CsMindmap({ data, onCourseClick }) {
                   // (新!) 使用 CSS 类
                   className="mindmap-node-text-wrapper"
                   style={{ fontSize: "14px" }} // (保留) 覆盖 CSS
->>>>>>> Stashed changes
                 >
                   {course.id}
                 </div>
               </foreignObject>
-<<<<<<< Updated upstream
-=======
 
               {isSeqParent && (
                 <text
@@ -589,30 +497,15 @@ export default function CsMindmap({ data, onCourseClick }) {
                     }));
                   }}
                 >
-                  {mathSeqOpen[course.id] ? "-" : "+"}
+                  {mathSeqOpen[course.id] ? "-" : "-"}
                 </text>
               )}
->>>>>>> Stashed changes
             </g>
           );
 
           elements.push(
             <path
               key={`curve-${cluster}-${course.id}`}
-<<<<<<< Updated upstream
-              style={{ transition: "all 0.35s ease" }}
-              d={`
-                M ${xStart + 70} ${cy}
-                C ${xStart + 150} ${cy},
-                  ${courseX - 150} ${courseY},
-                  ${courseX - 80} ${courseY}
-              `}
-              fill="none"
-              stroke="#bbb"
-              strokeWidth="1.5"
-            />
-          );
-=======
               // (新!) 添加动画类
               className={`mindmap-path ${isCollapsed ? "collapsed" : ""}`}
               d={`
@@ -621,11 +514,10 @@ export default function CsMindmap({ data, onCourseClick }) {
                   ${courseX - 200} ${courseY},
                   ${courseX - 90} ${courseY}
               `}
-              // (已删除) fill, stroke, strokeWidth
             />
           );
 
-          // === sequence expansion ===
+          // === sequence expansion === (保留你原来的逻辑)
           if (isSeqParent && mathSeqOpen[course.id]) {
             const seqMap = {
               "MATH 14X": ["MATH 141", "MATH 142", "MATH 143"],
@@ -633,7 +525,7 @@ export default function CsMindmap({ data, onCourseClick }) {
               "MATH 17X": ["MATH 171", "MATH 172"]
             };
             const seq = seqMap[course.id] || [];
-            let prevX = courseX + 120;
+            let prevX = courseX + 120; // (修复!) 恢复你原来的 +120
 
             seq.forEach((sub, si) => {
               const sx = courseX + 260 + si * 150;
@@ -655,7 +547,6 @@ export default function CsMindmap({ data, onCourseClick }) {
                     width={130}
                     height={50}
                     rx={20}
-                    // (已删除) fill, stroke, strokeWidth
                   />
                   <text
                     x={sx}
@@ -676,19 +567,15 @@ export default function CsMindmap({ data, onCourseClick }) {
                   key={`seq-arrow1-${course.id}-${sub}`}
                   // (新!) 添加动画类
                   className={`math-seq-path ${isCollapsed ? "collapsed" : ""}`}
-                  d={`M ${prevX + 65} ${sy} L ${sx - 65} ${sy}`}
+                  d={`M ${prevX + 65} ${sy} L ${sx - 65} ${sy}`} // (修复!) 恢复你原来的 +65
                   markerEnd="url(#arrowhead)"
-                  // (已删除) fill, stroke, strokeWidth
                 />
               );
               prevX = sx;
             });
           }
->>>>>>> Stashed changes
         });
       }
-      
-      // (新!) 删除了 } (来自旧的 if 语句)
     });
 
     return elements;
@@ -700,6 +587,7 @@ export default function CsMindmap({ data, onCourseClick }) {
       <MindmapStyles />
       
       <defs>
+        {/* (保留你原来的 defs) */}
         <linearGradient id="clusterGradient" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#6ca0ff" />
           <stop offset="100%" stopColor="#3c6ddf" />
