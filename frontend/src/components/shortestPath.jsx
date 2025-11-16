@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 
 export default function ShortestPath({ plannerList, courses, onBack }) {
-  const [paths, setPaths] = useState(null);
+  const [paths, setPaths] = useState([]);
   const [error, setError] = useState(null);
 
   // Normalize source of planner courses: prefer plannerList, fall back to courses
@@ -30,11 +30,12 @@ export default function ShortestPath({ plannerList, courses, onBack }) {
         setError(null);
         setPaths(null);
 
-        const response = await fetch("http://10.5.185.106:5000/api/courses", {
+        const response = await fetch("/api/courses", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             courses: effectiveList.map((c) => c.id),
+            maxPerTerm: 4, // 先写死 4，之后接 UI
           }),
         });
 
@@ -45,7 +46,17 @@ export default function ShortestPath({ plannerList, courses, onBack }) {
         const data = await response.json();
         console.log("📥 Backend returned:", data);
 
-        setPaths(data);
+        // 后端返回形如 { paths: [ { order: [...], length: n }, ... ] }
+        // 这里把它转换成 [ [...], [...], ... ] 方便下面直接 join 显示
+        // const groups = Array.isArray(data?.paths)
+        //   ? data.paths.map((p) =>
+        //       Array.isArray(p?.order) ? p.order : []
+        //     )
+        //   : [];
+        // setPaths(groups);
+        const groups = Array.isArray(data?.semesters) ? data.semesters : [];
+        setPaths(groups);
+   
       } catch (err) {
         console.error("❌ API Error:", err);
         setError(err.message);
@@ -89,7 +100,48 @@ export default function ShortestPath({ plannerList, courses, onBack }) {
       )}
 
       {/* Show Result */}
-      {paths && (
+      {Array.isArray(paths) && paths.length > 0 && (
+  <div style={{ marginTop: "24px" }}>
+    {paths.map((term, idx) => (
+      <div
+        key={idx}
+        style={{
+          marginBottom: "12px",
+          padding: "12px 16px",
+          borderRadius: "10px",
+          background: "#020617",
+          border: "1px solid #1f2937",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "15px",
+            fontWeight: 600,
+            color: "#e5e7eb",
+            marginBottom: "6px",
+          }}
+        >
+          Semester {idx + 1}
+        </div>
+        <div
+          style={{
+            background: "#f3f4f6",
+            padding: "8px 10px",
+            borderRadius: "8px",
+            color: "#111827",
+            fontSize: "14px",
+            whiteSpace: "nowrap",
+            overflowX: "auto",
+          }}
+        >
+          {term.join(" → ")}
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+      
+      {/* {paths && (
         <div style={{ marginTop: "20px" }}>
           {paths.map((group, idx) => (
             <div key={idx} style={{ marginBottom: "14px" }}>
@@ -100,6 +152,7 @@ export default function ShortestPath({ plannerList, courses, onBack }) {
                   padding: "10px",
                   borderRadius: "8px",
                   marginTop: "6px",
+                  color: "#111827",
                 }}
               >
                 {group.join(" → ")}
@@ -107,7 +160,7 @@ export default function ShortestPath({ plannerList, courses, onBack }) {
             </div>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

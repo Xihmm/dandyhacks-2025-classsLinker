@@ -451,7 +451,14 @@ export default function CsMindmap({ data, onCourseClick }) {
               className={`mindmap-group ${isCollapsed ? "collapsed" : ""}`}
               style={{ cursor: isSeqParent ? "pointer" : "default" }}
               onClick={() => {
-                if (!isSeqParent) onCourseClick && onCourseClick(course.id);
+                if (isSeqParent) {
+                  setMathSeqOpen((p) => ({
+                    ...p,
+                    [course.id]: !p[course.id],
+                  }));
+                } else {
+                  onCourseClick && onCourseClick(course.id);
+                }
               }}
             >
               <rect

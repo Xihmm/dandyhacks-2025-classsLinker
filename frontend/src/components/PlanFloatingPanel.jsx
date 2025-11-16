@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 
 export default function PlanFloatingPanel({
   courses,
@@ -9,6 +9,11 @@ export default function PlanFloatingPanel({
   onExternalDrop,
   onClear,
 }) {
+  const [panelPosition, setPanelPosition] = useState({ top: null, left: null });
+  const [isPanelDragging, setIsPanelDragging] = useState(false);
+  const panelRef = useRef(null);
+  const panelDragOffsetRef = useRef({ x: 0, y: 0 });
+
   const [dragIndex, setDragIndex] = useState(null);
 
   const handleDragStart = (index) => (e) => {
@@ -44,6 +49,39 @@ export default function PlanFloatingPanel({
     onExternalDrop(id);
   };
 
+  const handlePanelDragStart = (e) => {
+    if (!panelRef.current) return;
+    const rect = panelRef.current.getBoundingClientRect();
+    panelDragOffsetRef.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    };
+    setIsPanelDragging(true);
+  };
+
+  useEffect(() => {
+    if (!isPanelDragging) return;
+
+    const handleMouseMove = (e) => {
+      setPanelPosition({
+        top: e.clientY - panelDragOffsetRef.current.y,
+        left: e.clientX - panelDragOffsetRef.current.x,
+      });
+    };
+
+    const handleMouseUp = () => {
+      setIsPanelDragging(false);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isPanelDragging]);
+
   // 折叠状态
   if (!visible) {
     return (
@@ -76,10 +114,9 @@ export default function PlanFloatingPanel({
 
   return (
     <div
+      ref={panelRef}
       style={{
         position: "fixed",
-        right: "16px",
-        bottom: "16px",
         width: "320px",
         maxHeight: "60vh",
         display: "flex",
@@ -90,10 +127,15 @@ export default function PlanFloatingPanel({
         boxShadow: "0 20px 40px rgba(15,23,42,0.2)",
         zIndex: 50,
         overflow: "hidden",
+        right: panelPosition.left === null ? "16px" : undefined,
+        bottom: panelPosition.top === null ? "16px" : undefined,
+        top: panelPosition.top !== null ? panelPosition.top : undefined,
+        left: panelPosition.left !== null ? panelPosition.left : undefined,
       }}
     >
       {/* 顶部标题栏 */}
       <div
+        onMouseDown={handlePanelDragStart}
         style={{
           padding: "8px 12px",
           display: "flex",
@@ -101,6 +143,7 @@ export default function PlanFloatingPanel({
           justifyContent: "space-between",
           background: "#111827",
           color: "#f9fafb",
+          cursor: "move",
         }}
       >
         <div style={{ fontSize: "14px", fontWeight: 600 }}>My Plan</div>
@@ -204,12 +247,32 @@ export default function PlanFloatingPanel({
           padding: "8px",
           borderTop: "1px solid #e5e7eb",
           background: "#fff",
-          textAlign: "center",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "8px",
         }}
       >
         <button
+          onClick={onClear}
+          disabled={!courses || courses.length === 0}
+          style={{
+            flex: 1,
+            padding: "6px 10px",
+            borderRadius: "999px",
+            background: (!courses || courses.length === 0) ? "#e5e7eb" : "#ef4444",
+            color: (!courses || courses.length === 0) ? "#9ca3af" : "#ffffff",
+            border: "none",
+            fontSize: "13px",
+            cursor: (!courses || courses.length === 0) ? "default" : "pointer",
+          }}
+        >
+          Clear all
+        </button>
+        <button
           onClick={() => window.dispatchEvent(new Event("openShortestPath"))}
           style={{
+            flex: 1,
             padding: "8px 14px",
             borderRadius: "999px",
             background: "#2563eb",
@@ -236,6 +299,3 @@ export default function PlanFloatingPanel({
     </div>
   );
 }
-
-
-
