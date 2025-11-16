@@ -1,8 +1,9 @@
 import CsRequirementsPage from "./components/CsRequirementsPage";
-import PlanFloatingPanel from "./PlanFloatingPanel";
+import PlanFloatingPanel from "./components/PlanFloatingPanel";
 import rawData from "./data/mock-data.json";
 import { useState, useEffect } from "react";   // ⭐ NEW：useEffect
 import CourseGraph from "./components/CourseGraph";
+import ShortestPath from "./components/ShortestPath";
 
 const rawNodes = Array.isArray(rawData?.nodes)
   ? rawData.nodes
@@ -18,7 +19,7 @@ const COURSE_IDS = rawNodes
 const normalizeId = (s) =>
   typeof s === "string" ? s.toUpperCase().replace(/\s+/g, "") : "";
 
-function CourseDetail({ course, onAddToPlan, onClose }) {
+function CourseDetail({ course, onAddToPlan, onClose, onGoToRequirements }) {
   if (!course) {
     return (
       <div
@@ -288,6 +289,10 @@ function App() {
     setActivePage("graph");
     setFocusedCourseId(id);
     setSelectedCourse(null);
+  };
+
+  const handleClearPlan = () => {
+    setPlanCourses([]);
   };
 
   return (

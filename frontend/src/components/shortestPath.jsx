@@ -1,26 +1,40 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
-export default function ShortestPath({ plannerList, onBack }) {
+export default function ShortestPath({ plannerList, courses, onBack }) {
   const [paths, setPaths] = useState(null);
   const [error, setError] = useState(null);
+
+  // Normalize source of planner courses: prefer plannerList, fall back to courses
+  const effectiveList = useMemo(() => {
+    if (Array.isArray(plannerList) && plannerList.length > 0) {
+      return plannerList;
+    }
+    if (Array.isArray(courses) && courses.length > 0) {
+      return courses;
+    }
+    return [];
+  }, [plannerList, courses]);
 
   console.log("🔥 ShortestPath rendered with plannerList:", plannerList);
 
   useEffect(() => {
     async function fetchPath() {
       try {
-        if (!plannerList || plannerList.length === 0) {
+        if (!effectiveList || effectiveList.length === 0) {
           setError("Planner list is empty.");
+          setPaths(null);
           return;
         }
 
-        console.log("📡 Sending to backend:", plannerList);
+        console.log("📡 Sending to backend:", effectiveList);
+        setError(null);
+        setPaths(null);
 
         const response = await fetch("http://10.5.185.106:5000/api/courses", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            courses: plannerList.map((c) => c.id)
+            courses: effectiveList.map((c) => c.id),
           }),
         });
 
@@ -39,7 +53,7 @@ export default function ShortestPath({ plannerList, onBack }) {
     }
 
     fetchPath();
-  }, [plannerList]);
+  }, [effectiveList]);
 
   return (
     <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
