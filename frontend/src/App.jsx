@@ -295,25 +295,28 @@ function App() {
   };
 
 const handleJumpFromCsToGraph = (courseId) => {
-    const id = String(courseId).toUpperCase();
-    let normId = normalizeId(id); // e.g., "MATH141" OR "EQUIVMTH141"
+    const raw = String(courseId);
+    const upper = raw.toUpperCase();
+
+    // 从传入字符串中提取第一个课程号（例如 "MATH 141" / "CSC 172"）
+    // 这样像 "MATH 141 or equivalent" / "CSC 160 / MATH 141" 这类文本
+    // 会被解析成一个干净的课程ID，而不会把整句话当成ID
+    const codeMatch = upper.match(/\b(CSC|MATH)\s*\d+[A-Z]?\b/);
+
+    // 如果匹配到了课程号，就用它；否则退回到整串大写文本
+    const baseId = codeMatch ? codeMatch[0].replace(/\s+/, " ") : upper;
+
+    const id = baseId;                // e.g. "MATH 141"
+    let normId = normalizeId(id);     // e.g. "MATH141" OR "EQUIVMTH141"
 
     // ⭐ 步骤 1：硬编码的“虚拟节点 -> CS课”映射表
-    // 映射到逻辑上最相关的 *可见* CS 课程
+    // 只映射真正“看不见”的虚拟节点 (EQUIV-)，
+    // 真实的 MATH 课程（如 MATH 141 / 150 / 171）直接在 graph 里显示
     const virtualToCsMap = {
-      // --- 基础数学 (Calc 1, 2) -> 映射到 CSC 171 ---
-      "MATH141": "CSC171",
-      "MATH142": "CSC171",
-      "MATH14X": "CSC171",
       "EQUIVMTH141": "CSC171",
       "EQUIVMTH142": "CSC171",
       "EQUIVMTH14X": "CSC171",
 
-      // --- 高阶数学 (Discrete, Calc 3) -> 映射到 CSC 172 ---
-      "MATH150": "CSC172", // Discrete Math
-      "MATH143": "CSC172", // Calc 3
-      "MATH16X": "CSC172",
-      "MATH17X": "CSC172",
       "EQUIVMTH150": "CSC172",
       "EQUIVMTH143": "CSC172",
       "EQUIVMTH16X": "CSC172",

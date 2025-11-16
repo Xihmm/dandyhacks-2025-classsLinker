@@ -18,6 +18,28 @@ rawNodes.forEach((c) => {
   }
 });
 
+// 根据传入的 id（可能带空格/大小写不同）在现有课程中找到匹配的真实 id
+function resolveCourseId(inputId) {
+  if (!inputId) return null;
+
+  // 先尝试原始 id
+  if (idToCourse.has(inputId)) return inputId;
+
+  const norm = String(inputId).replace(/\s+/g, "").toUpperCase();
+
+  // EQUIV- 节点不要作为 root，只找非 EQUIV 的真实课程
+  for (const key of idToCourse.keys()) {
+    const keyStr = String(key);
+    if (keyStr.toUpperCase().startsWith("EQUIV-")) continue;
+    const kNorm = keyStr.replace(/\s+/g, "").toUpperCase();
+    if (kNorm === norm) {
+      return keyStr;
+    }
+  }
+
+  return null;
+}
+
 // 构建无向邻接表，用于 BFS 计算图距离（包括 EQUIV）
 function buildAdjacency(nodes, links) {
   const adj = new Map();
@@ -192,6 +214,7 @@ function layoutNodes(rootId) {
   const fallbackRing = maxKnown + 2;
 
   const rootCourse = rootId ? idToCourse.get(rootId) : null;
+  const rootCourseForLayout = rootCourse || (rootId ? { id: rootId } : null);
 
   // level -> [{ id, graphLevel, sim }]
   const ringBuckets = new Map();
@@ -221,14 +244,14 @@ function layoutNodes(rootId) {
   const CENTER_Y = 50;
   const RADIUS_STEP = 18; // 每一圈半径差再拉大一点，减少重叠
 
-  // 先把 root 放在中心
-  if (rootCourse && rootId) {
+  // 先把 root 放在中心：即便 mock-data 里没有完整信息，也至少显示一个 root 节点
+  if (rootId && rootCourseForLayout) {
     const rootSize = sizeForCourse(rootId, 0, 999, rootId); // 会被函数内部强制成最大字号
     laidOut.push({
       id: rootId,
       x: CENTER_X,
       y: CENTER_Y,
-      course: rootCourse,
+      course: rootCourseForLayout,
       level: 0,
       size: rootSize,
     });
@@ -280,7 +303,10 @@ function CourseGraph({
   focusedCourseId = null,
 }) {
   const defaultRootId = courseNodes[0]?.id ?? null;
-  const effectiveFocusId = focusedCourseId ?? defaultRootId;
+
+  // 先把外部传进来的 focusedCourseId 解析成真实存在的课程 id
+  const resolvedFocusId = resolveCourseId(focusedCourseId);
+  const effectiveFocusId = resolvedFocusId ?? defaultRootId;
 
   const laidOutNodes = useMemo(
     () => layoutNodes(effectiveFocusId),

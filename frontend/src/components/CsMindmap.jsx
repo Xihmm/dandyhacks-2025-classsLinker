@@ -109,6 +109,12 @@ export default function CsMindmap({ data, onCourseClick }) {
     "MATH 17X": false
   });
 
+  const [writingSubCollapsed, setWritingSubCollapsed] = useState({
+    CSC: true,
+    WRTG: true,
+    PHIL: true,
+  }); 
+
   const clusterColors = {
     "Core": { bg: "#6ca0ff", stroke: "#3c6ddf" },
     "Writing": { bg: "#c28bff", stroke: "#9d63e5" },
@@ -307,11 +313,22 @@ export default function CsMindmap({ data, onCourseClick }) {
         subgroupNames.forEach((sg, sgi) => {
           const sgY = subgroupY;
           const subgroupNodeX = xStart + 250;
+
+          // 子分组折叠：受整个 Writing 折叠 + 自己折叠一起控制
+          const isSubCollapsed = isCollapsed || writingSubCollapsed[sg];
+
           elements.push(
             <g 
               key={`writing-subgroup-${sg}`}
-              // (新!) 添加动画类
               className={`mindmap-subgroup-label ${isCollapsed ? "collapsed" : ""}`}
+              style={{ cursor: "pointer" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setWritingSubCollapsed((prev) => ({
+                  ...prev,
+                  [sg]: !prev[sg],
+                }));
+              }}
             >
               <rect
                 x={subgroupNodeX - 68}
@@ -334,6 +351,14 @@ export default function CsMindmap({ data, onCourseClick }) {
                 style={{ letterSpacing: "2px" }}
               >
                 {sg}
+              </text>
+              <text
+                x={subgroupNodeX + 58}
+                y={sgY}
+                fontSize="18"
+                fill="#ffffff"
+              >
+                {writingSubCollapsed[sg] ? "+" : "-"}
               </text>
             </g>
           );
@@ -362,7 +387,7 @@ export default function CsMindmap({ data, onCourseClick }) {
                 key={course.id}
                 onClick={() => onCourseClick && onCourseClick(course.id)}
                 // (新!) 添加动画类
-                className={`mindmap-group ${isCollapsed ? "collapsed" : ""}`}
+                className={`mindmap-group ${isSubCollapsed ? "collapsed" : ""}`}
                 style={{ cursor: "pointer" }}
               >
                 <rect
@@ -392,7 +417,7 @@ export default function CsMindmap({ data, onCourseClick }) {
                       : ""}
                   </div>
                 </foreignObject>
-
+  
                 <foreignObject
                   x={courseX - 80}
                   y={courseY - 5}
@@ -413,7 +438,7 @@ export default function CsMindmap({ data, onCourseClick }) {
               <path
                 key={`curve-writing-${sg}-${course.id}`}
                 // (新!) 添加动画类
-                className={`mindmap-path ${isCollapsed ? "collapsed" : ""}`}
+                className={`mindmap-path ${isSubCollapsed ? "collapsed" : ""}`}
                 d={`
                   M ${subgroupNodeX + 68} ${sgY}
                   C ${subgroupNodeX + 130} ${sgY},
@@ -538,15 +563,18 @@ export default function CsMindmap({ data, onCourseClick }) {
             />
           );
 
-          // === sequence expansion === (保留你原来的逻辑)
-          if (isSeqParent && mathSeqOpen[course.id]) {
+          // === sequence expansion ===
+          if (!isCollapsed && isSeqParent && mathSeqOpen[course.id]) {
             const seqMap = {
               "MATH 14X": ["MATH 141", "MATH 142", "MATH 143"],
               "MATH 16X": ["MATH 161", "MATH 162"],
-              "MATH 17X": ["MATH 171", "MATH 172"]
+              "MATH 17X": ["MATH 171", "MATH 172"],
             };
             const seq = seqMap[course.id] || [];
-            let prevX = courseX + 120; // (修复!) 恢复你原来的 +120
+
+            // prevCenterX 记录“上一段箭头起点”的中心 X：
+            // si === 0 时指的是 parent 课程；之后指的是前一个子课程中心
+            let prevCenterX = courseX;
 
             seq.forEach((sub, si) => {
               const sx = courseX + 260 + si * 150;
@@ -557,12 +585,11 @@ export default function CsMindmap({ data, onCourseClick }) {
                 <g
                   key={`${course.id}-seq-${sub}`}
                   onClick={() => onCourseClick && onCourseClick(sub)}
-                  // (新!) 添加动画类
                   className={`mindmap-group ${isCollapsed ? "collapsed" : ""}`}
                   style={{ cursor: "pointer" }}
                 >
                   <rect
-                    className="math-seq-node mindmap-node" // (新!) 使用组合 CSS 类
+                    className="math-seq-node mindmap-node"
                     x={sx - 65}
                     y={sy - 25}
                     width={130}
@@ -583,21 +610,26 @@ export default function CsMindmap({ data, onCourseClick }) {
                 </g>
               );
 
+              // 箭头从前一个胶囊的右边缘指向当前胶囊的左边缘
+              const startX =
+                si === 0 ? prevCenterX + 90 : prevCenterX + 65; // parent 宽 180, 子节点宽 130
+              const endX = sx - 65;
+
               elements.push(
                 <path
                   key={`seq-arrow1-${course.id}-${sub}`}
-                  // (新!) 添加动画类
                   className={`math-seq-path ${isCollapsed ? "collapsed" : ""}`}
-                  d={`M ${prevX + 65} ${sy} L ${sx - 65} ${sy}`} // (修复!) 恢复你原来的 +65
+                  d={`M ${startX} ${sy} L ${endX} ${sy}`}
                   markerEnd="url(#arrowhead)"
                 />
               );
-              prevX = sx;
+
+              prevCenterX = sx;
             });
           }
 
           // === prereq capsules: always visible, horizontal, no line from parent ===
-          if (hasPrereq && expandedPrereqs.length > 0) {
+          if (!isCollapsed && hasPrereq && expandedPrereqs.length > 0) {
             const PREREQ_WIDTH = 180;
             const baseX = courseX + 260;
 
@@ -645,13 +677,17 @@ export default function CsMindmap({ data, onCourseClick }) {
                     </g>
                   );
 
-                  // 序列内部箭头：171 → 172
+                  // 序列内部箭头：171 → 172，从前一胶囊右边缘指向当前胶囊左边缘
                   if (si > 0) {
+                    const prevCenter = ssx - 180; // 上一个子课程的中心 X
+                    const startX = prevCenter + 65; // 上一个子课程右边缘
+                    const endX = ssx - 65; // 当前子课程左边缘
+
                     elements.push(
                       <path
                         key={`prereq-seq-arrow-${course.id}-${pid}-${sub}`}
                         className={`math-seq-path ${isCollapsed ? "collapsed" : ""}`}
-                        d={`M ${ssx - 180 + 65} ${ssy} L ${ssx - 65} ${ssy}`}
+                        d={`M ${startX} ${ssy} L ${endX} ${ssy}`}
                         markerEnd="url(#arrowhead)"
                       />
                     );
