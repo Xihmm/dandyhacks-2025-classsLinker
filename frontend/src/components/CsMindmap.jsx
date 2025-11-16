@@ -147,6 +147,20 @@ export default function CsMindmap({ data }) {
           >
             {collapsed[cluster] ? "+" : "-"}
           </text>
+
+          {(cluster === "Writing" || cluster === "Additional Math") && (
+            <text
+              x={xStart}
+              y={cy + 26}
+              textAnchor="middle"
+              alignmentBaseline="middle"
+              fill="#ffffff"
+              fontSize="12"
+              fontStyle="italic"
+            >
+              Choose two courses
+            </text>
+          )}
         </g>
       );
 
