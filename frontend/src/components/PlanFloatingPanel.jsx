@@ -33,7 +33,6 @@ export default function PlanFloatingPanel({
   }, []);
 
   const handleExternalDragOver = (e) => {
-    // 允许从外部（CourseGraph 等）拖拽课程进来
     e.preventDefault();
   };
 
@@ -45,9 +44,7 @@ export default function PlanFloatingPanel({
     onExternalDrop(id);
   };
 
-  const hasCourses = Array.isArray(courses) && courses.length > 0;
-
-  // 折叠状态：只显示一个小按钮
+  // 折叠状态
   if (!visible) {
     return (
       <div
@@ -106,38 +103,20 @@ export default function PlanFloatingPanel({
           color: "#f9fafb",
         }}
       >
-        <div style={{ fontSize: "14px", fontWeight: 600 }}>
-          My Plan
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <button
-            onClick={() => onClear && onClear()}
-            disabled={!hasCourses}
-            style={{
-              border: "none",
-              borderRadius: "999px",
-              padding: "2px 8px",
-              fontSize: "12px",
-              background: hasCourses ? "#f9fafb" : "#4b5563",
-              color: "#111827",
-              cursor: hasCourses ? "pointer" : "default",
-            }}
-          >
-            Clear all
-          </button>
-          <button
-            onClick={onToggleVisible}
-            style={{
-              border: "none",
-              background: "transparent",
-              color: "#e5e7eb",
-              fontSize: "14px",
-              cursor: "pointer",
-            }}
-          >
-            hide
-          </button>
-        </div>
+        <div style={{ fontSize: "14px", fontWeight: 600 }}>My Plan</div>
+        <button
+          onClick={onToggleVisible}
+          style={{
+            border: "none",
+            background: "transparent",
+            color: "#e5e7eb",
+            fontSize: "14px",
+            cursor: "pointer",
+          }}
+
+        >
+          hide
+        </button>
       </div>
 
       {/* 列表区域 */}
@@ -159,8 +138,7 @@ export default function PlanFloatingPanel({
               padding: "4px 2px",
             }}
           >
-            Click a course in the graph / mindmap or use “Add to planner”
-            in the detail panel to add it here.
+            Click a course in the graph / mindmap or use “Add to planner” in the detail panel.
           </div>
         ) : (
           courses.map((c, index) => (
@@ -189,17 +167,21 @@ export default function PlanFloatingPanel({
                 fontSize: "13px",
               }}
             >
-              <span style={{ 
-                flex: 1, 
-                whiteSpace: "nowrap", 
-                overflow: "hidden", 
-                textOverflow: "ellipsis", 
-                color: "#111827",  }}>
+              <span
+                style={{
+                  flex: 1,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  color: "#111827",
+                }}
+              >
                 {index + 1}. {c.id || c.code || c.title}
               </span>
               <button
                 onClick={() => onRemove(c.id)}
                 style={{
+
                   border: "none",
                   borderRadius: "999px",
                   padding: "2px 8px",
@@ -216,7 +198,31 @@ export default function PlanFloatingPanel({
         )}
       </div>
 
-      {/* 底部小提示 */}
+      {/* Shortest Path 按钮 */}
+      <div
+        style={{
+          padding: "8px",
+          borderTop: "1px solid #e5e7eb",
+          background: "#fff",
+          textAlign: "center",
+        }}
+      >
+        <button
+          onClick={() => window.dispatchEvent(new Event("openShortestPath"))}
+          style={{
+            padding: "8px 14px",
+            borderRadius: "999px",
+            background: "#2563eb",
+            color: "white",
+            border: "none",
+            fontSize: "14px",
+            cursor: "pointer",
+          }}
+        >
+          Shortest Path
+        </button>
+      </div>
+
       <div
         style={{
           padding: "6px 8px",
@@ -230,3 +236,6 @@ export default function PlanFloatingPanel({
     </div>
   );
 }
+
+
+

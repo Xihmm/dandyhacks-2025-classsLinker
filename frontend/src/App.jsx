@@ -1,10 +1,8 @@
-import { useState } from "react";
-
-import CourseGraph from "./components/CourseGraph";
 import CsRequirementsPage from "./components/CsRequirementsPage";
-import PlanFloatingPanel from "./components/PlanFloatingPanel";
+import PlanFloatingPanel from "./PlanFloatingPanel";
 import rawData from "./data/mock-data.json";
-
+import { useState, useEffect } from "react";   // ⭐ NEW：useEffect
+import CourseGraph from "./components/CourseGraph";
 
 const rawNodes = Array.isArray(rawData?.nodes)
   ? rawData.nodes
@@ -12,24 +10,15 @@ const rawNodes = Array.isArray(rawData?.nodes)
   ? rawData
   : [];
 
-const COURSE_MAP = new Map();
-rawNodes.forEach((c) => {
-  if (c && typeof c.id === "string") {
-    COURSE_MAP.set(c.id.toUpperCase(), c);
-  }
-});
-
 const COURSE_IDS = rawNodes
   .map((n) => n && n.id)
   .filter((id) => typeof id === "string")
   .filter((id) => !id.toUpperCase().startsWith("EQUIV-"));
 
-// Helper to normalize course ids: uppercase and remove spaces
 const normalizeId = (s) =>
   typeof s === "string" ? s.toUpperCase().replace(/\s+/g, "") : "";
 
-
-function CourseDetail({ course, onAddToPlan, onClose, onGoToRequirements }) {
+function CourseDetail({ course, onAddToPlan, onClose }) {
   if (!course) {
     return (
       <div
@@ -82,6 +71,7 @@ function CourseDetail({ course, onAddToPlan, onClose, onGoToRequirements }) {
             {title || ""}
           </div>
         </div>
+
         {onClose && (
           <button
             onClick={onClose}
@@ -93,7 +83,6 @@ function CourseDetail({ course, onAddToPlan, onClose, onGoToRequirements }) {
               fontSize: "16px",
               lineHeight: 1,
             }}
-            aria-label="Close"
           >
             ×
           </button>
@@ -129,6 +118,7 @@ function CourseDetail({ course, onAddToPlan, onClose, onGoToRequirements }) {
           {description || "No description provided."}
         </div>
       </div>
+
       <div style={{ marginTop: "16px" }}>
         <button
           onClick={() =>
@@ -143,7 +133,7 @@ function CourseDetail({ course, onAddToPlan, onClose, onGoToRequirements }) {
           style={{
             padding: "8px 14px",
             borderRadius: "999px",
-            border: "none",
+ border: "none",
             background: "#2563eb",
             color: "#ffffff",
             fontSize: "14px",
@@ -183,19 +173,22 @@ function App() {
   const [searchText, setSearchText] = useState("");
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [activePage, setActivePage] = useState("graph"); // "graph" | "cs"
+  const [activePage, setActivePage] = useState("graph"); 
   const [planCourses, setPlanCourses] = useState([]);
   const [plannerVisible, setPlannerVisible] = useState(true);
 
-  const handleClearPlan = () => {
-    setPlanCourses([]);
-  };
+  const [showShortestPath, setShowShortestPath] = useState(false);  // ⭐ NEW
 
-  // 点击云里的课程时触发
+  // ⭐ NEW — 监听 Planner 发来的事件
+  useEffect(() => {
+    const handler = () => setShowShortestPath(true);
+    window.addEventListener("openShortestPath", handler);
+    return () => window.removeEventListener("openShortestPath", handler);
+  }, []);
+
   const handleNodeSelect = (id, course) => {
-    setFocusedCourseId(id);      // 让这门课变成中心 / 放大
-    setSelectedCourse(course);   // 右侧详情显示
-    console.log("Selected course:", id, course);
+    setFocusedCourseId(id);
+    setSelectedCourse(course);
   };
 
   const handleSearchChange = (e) => {
@@ -212,18 +205,15 @@ function App() {
 
     const candidates = COURSE_IDS.filter((id) => {
       const normId = normalizeId(id);
-
-      // direct match: CSC172 vs CSC 172
       if (normId.includes(normInput)) return true;
 
-      // heuristic: allow "CS172" to match "CSC172"
       if (normInput.startsWith("CS") && !normInput.startsWith("CSC")) {
         const expanded = "CSC" + normInput.slice(2);
         if (normId.includes(expanded)) return true;
       }
 
       return false;
-    })
+       })
       .sort((a, b) => {
         const t = normInput;
         const aNorm = normalizeId(a);
@@ -240,76 +230,51 @@ function App() {
   };
 
   const handleSuggestionClick = (id) => {
-    if (!id) return;
-    const upper = id.toUpperCase();
-    setSearchText(upper);
+    setSearchText(id);
     setShowSuggestions(false);
     setActivePage("graph");
-    setFocusedCourseId(upper);
+    setFocusedCourseId(id.toUpperCase());
   };
 
-  // 搜索到特定 node
   const handleSearch = () => {
     let key = searchText.trim().toUpperCase();
     if (!key) return;
 
-    // Hide CSC160 / CSC161 from search
-    if (["CSC160", "CSC 160", "CSC161", "CSC 161"].includes(key)) {
-      return;
-    }
-
-    // Normalize math equivalents
-    if (key === "EQUIV-MATH14X") key = "MATH 14X";
-    if (key === "EQUIV-MATH16X") key = "MATH 16X";
-    if (key === "EQUIV-MATH17X") key = "MATH 17X";
-
-    // Normalize WRTG 273
-    if (key === "WRTG273" || key === "WRTG 273") {
-      key = "WRTG 273 (Soph. & Juniors only)";
-    }
+    if (["CSC160", "CSC161"].includes(key)) return;
 
     const normInput = normalizeId(key);
     if (!normInput) return;
 
-    // 在已知课程里找第一个规范化后前缀匹配的 id
-    const matched = COURSE_IDS.find((id) => {
-      const normId = normalizeId(id);
-      if (normId.startsWith(normInput)) return true;
-      if (normInput.startsWith("CS") && !normInput.startsWith("CSC")) {
-        const expanded = "CSC" + normInput.slice(2);
-        if (normId.startsWith(expanded)) return true;
-      }
-      return false;
-    });
+    const matched = COURSE_IDS.find((id) =>
+      normalizeId(id).startsWith(normInput)
+    );
 
     if (matched) {
       setActivePage("graph");
-      setFocusedCourseId(matched.toUpperCase());
-    } else {
-      setFocusedCourseId(key);
+      setFocusedCourseId(matched);
     }
   };
-  
-  // 返回“主界面” = 回到默认中心课程
+
   const handleReset = () => {
-    setFocusedCourseId(null);    // CourseGraph 里会自动用第一门课当中心
+    setFocusedCourseId(null);
     setSelectedCourse(null);
     setSearchText("");
   };
 
   const handleAddCourseToPlan = (course) => {
-    if (!course || !course.id) return;
-    setPlanCourses((prev) => {
-      if (prev.find((c) => c.id === course.id)) return prev;
-      return [...prev, course];
-    });
+    if (!course?.id) return;
+    setPlanCourses((prev) =>
+      prev.find((c) => c.id === course.id)
+        ? prev
+        : [...prev, course]
+    );
   };
 
   const handleRemoveFromPlan = (id) => {
     setPlanCourses((prev) => prev.filter((c) => c.id !== id));
   };
 
-  const handleReorderPlan = (fromIndex, toIndex) => {
+ const handleReorderPlan = (fromIndex, toIndex) => {
     setPlanCourses((prev) => {
       const next = [...prev];
       const [moved] = next.splice(fromIndex, 1);
@@ -319,12 +284,10 @@ function App() {
   };
 
   const handleJumpFromCsToGraph = (courseId) => {
-    if (!courseId) return;
     const id = String(courseId).toUpperCase();
     setActivePage("graph");
     setFocusedCourseId(id);
-    const course = COURSE_MAP.get(id) || null;
-    setSelectedCourse(course);
+    setSelectedCourse(null);
   };
 
   return (
@@ -336,7 +299,7 @@ function App() {
         flexDirection: "column",
       }}
     >
-      {/* 顶部搜索 + 返回主界面 */}
+      {/* 顶部栏 */}
       <div
         style={{
           padding: "10px 16px",
@@ -344,7 +307,6 @@ function App() {
           gap: "10px",
           alignItems: "center",
           borderBottom: "1px solid #e2e2e2",
-          boxSizing: "border-box",
           background: "#ffffff",
         }}
       >
@@ -356,39 +318,53 @@ function App() {
           }}
         >
           <button
-            onClick={() => setActivePage("graph")}
+            onClick={() => {
+              setShowShortestPath(false); // ⭐ NEW
+              setActivePage("graph");
+            }}
             style={{
               padding: "6px 12px",
               borderRadius: "999px",
               border: "none",
-              fontSize: "14px",
-              fontWeight: 500,
-              cursor: "pointer",
               background:
-                activePage === "graph" ? "#111827" : "transparent",
-              color: activePage === "graph" ? "#ffffff" : "#374151",
-            }}
+                activePage === "graph" && !showShortestPath
+                  ? "#111827"
+                  : "transparent",
+              color:
+                activePage === "graph" && !showShortestPath
+                  ? "#fff"
+                  : "#374151",
+              cursor: "pointer",
+             }}
           >
             Course Graph
           </button>
+
           <button
-            onClick={() => setActivePage("cs")}
+            onClick={() => {
+              setShowShortestPath(false); // ⭐ NEW
+              setActivePage("cs");
+            }}
             style={{
               padding: "6px 12px",
               borderRadius: "999px",
               border: "none",
-              fontSize: "14px",
-              fontWeight: 500,
-              cursor: "pointer",
               background:
-                activePage === "cs" ? "#111827" : "transparent",
-              color: activePage === "cs" ? "#ffffff" : "#374151",
+                activePage === "cs" && !showShortestPath
+                  ? "#111827"
+                  : "transparent",
+              color:
+                activePage === "cs" && !showShortestPath
+                  ? "#fff"
+                  : "#374151",
+              cursor: "pointer",
             }}
           >
             CS Requirements
           </button>
         </div>
 
+        {/* 搜索栏 */}
         <div
           style={{
             flex: 1,
@@ -401,29 +377,16 @@ function App() {
             placeholder="ENTER YOUR COURSE NUMBER (i.e.CSC 172)"
             value={searchText}
             onChange={handleSearchChange}
-            onFocus={() => {
-              if (searchSuggestions.length) setShowSuggestions(true);
-            }}
-            onBlur={() => {
-              // 稍微延迟一下，保证点击选项时不会被立刻隐藏
-              setTimeout(() => setShowSuggestions(false), 80);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleSearch();
-            }}
             style={{
               width: "100%",
               padding: "8px 12px",
               borderRadius: "999px",
               border: "1px solid #c4c4c4",
               fontSize: "14px",
-              outline: "none",
-              background: "#ffffff",
-              color: "#000000",
             }}
           />
 
-          {showSuggestions && searchSuggestions.length > 0 && (
+          {showSuggestions && (
             <div
               style={{
                 position: "absolute",
@@ -433,70 +396,59 @@ function App() {
                 marginTop: "4px",
                 background: "#ffffff",
                 borderRadius: "12px",
-                boxShadow: "0 8px 24px rgba(15,23,42,0.15)",
+   boxShadow: "0 8px 24px rgba(15,23,42,0.15)",
                 maxHeight: "220px",
                 overflowY: "auto",
                 zIndex: 40,
-                color: "#111827",
               }}
             >
               {searchSuggestions.map((id) => (
                 <div
                   key={id}
-                  onMouseDown={() => handleSuggestionClick(id)}
                   style={{
                     padding: "6px 10px",
-                    fontSize: "13px",
+                    color: "#111827",
                     cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
                   }}
+                  onMouseDown={() => handleSuggestionClick(id)}
                 >
-                  <span
-                    style={{
-                      color: "#111827",
-                    }}
-                  >
-                    {id}
-                  </span>
+                  {id}
                 </div>
               ))}
             </div>
           )}
         </div>
+
         <button
           onClick={handleSearch}
           style={{
             padding: "8px 14px",
-            fontSize: "14px",
             borderRadius: "999px",
-            border: "none",
             background: "#2563eb",
             color: "#ffffff",
+            border: "none",
             cursor: "pointer",
-            fontWeight: 500,
           }}
         >
           Search
         </button>
+
         <button
           onClick={handleReset}
           style={{
             padding: "8px 14px",
-            fontSize: "14px",
             borderRadius: "999px",
-            border: "none",
             background: "#4b5563",
             color: "#ffffff",
+            border: "none",
             cursor: "pointer",
-            fontWeight: 500,
           }}
         >
           Back
         </button>
       </div>
 
-      {/* 主体区域：左云图 + 右详情 */}
+      {/* 主区域：核心部分 */}
       <div
         style={{
           flex: 1,
@@ -504,29 +456,29 @@ function App() {
           minHeight: 0,
         }}
       >
-        {activePage === "graph" && (
+   {/* ⭐ NEW: Shortest Path 页面 */}
+        {showShortestPath ? (
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <ShortestPath
+              courses={planCourses}
+              onBack={() => setShowShortestPath(false)}
+            />
+          </div>
+        ) : activePage === "graph" ? (
           <>
-            {/* 左边课程云 */}
-            <div
-              style={{
-                flex: selectedCourse ? 2 : 1,
-                minWidth: 0,
-              }}
-            >
+            <div style={{ flex: selectedCourse ? 2 : 1 }}>
               <CourseGraph
                 onNodeSelect={handleNodeSelect}
                 focusedCourseId={focusedCourseId}
               />
             </div>
 
-            {/* 右边详情 panel：只有选中课程时才显示 */}
             {selectedCourse && (
               <div
                 style={{
                   width: "320px",
                   borderLeft: "1px solid #eee",
                   background: "#fafafa",
-                  boxSizing: "border-box",
                 }}
               >
                 <CourseDetail
@@ -538,6 +490,10 @@ function App() {
               </div>
             )}
           </>
+        ) : (
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <CsRequirementsPage onCourseSelect={handleJumpFromCsToGraph} />
+          </div>
         )}
 
         {/* CS Requirements 副页面：始终挂载，只是按需显示 */}
@@ -551,6 +507,8 @@ function App() {
           <CsRequirementsPage onCourseSelect={handleJumpFromCsToGraph} />
         </div>
       </div>
+
+      {/* 右下角 Planner */}
       <PlanFloatingPanel
         courses={planCourses}
         visible={plannerVisible}
@@ -562,4 +520,7 @@ function App() {
     </div>
   );
 }
+
 export default App;
+
+
