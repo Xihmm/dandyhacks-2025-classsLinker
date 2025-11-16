@@ -1,42 +1,97 @@
+
+/* Global layout */
 #root {
-  max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
+  background: #fafafa;
+  font-family: "Inter", "SF Pro Display", "Segoe UI", sans-serif;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Search bar area */
+.search-bar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.search-bar {
+  width: 300px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  transition: 0.2s ease;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.search-bar:focus {
+  outline: none;
+  border-color: #82aaff;
+  box-shadow: 0 0 10px rgba(130,170,255,0.4);
 }
 
-.card {
-  padding: 2em;
+.search-button {
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: #7aaaff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s ease;
 }
 
-.read-the-docs {
-  color: #888;
+.search-button:hover {
+  background: #5f8fff;
+}
+
+/* Mindmap nodes (Course bubbles) */
+.mindmap-node {
+  width: 160px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: white;
+  border: 1.5px solid #ddd;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  white-space: normal;
+  line-height: 1.2;
+  font-size: 14px;
+  color: #333;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Cluster labels (Foundations, Writing, etc.) */
+.mindmap-cluster-label {
+  padding: 12px 20px;
+  border-radius: 22px;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  background: linear-gradient(135deg, #6ca0ff, #3c6ddf);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Mindmap line style */
+line {
+  stroke: #c4c4c4;
+  stroke-width: 2px;
+}
+
+/* Hidden filtered courses */
+.hidden-course {
+  display: none !important;
 }

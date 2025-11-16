@@ -95,10 +95,25 @@ function App() {
 
   // 搜索到特定 node
   const handleSearch = () => {
-    const key = searchText.trim();
+    let key = searchText.trim().toUpperCase();
     if (!key) return;
-    // 简单处理：当成课程 id（如 CSC172）
-    setFocusedCourseId(key.toUpperCase());
+
+    // Hide CSC160 / CSC161 from search
+    if (["CSC160", "CSC 160", "CSC161", "CSC 161"].includes(key)) {
+        return;
+    }
+
+    // Normalize math equivalents
+    if (key === "EQUIV-MATH14X") key = "MATH 14X";
+    if (key === "EQUIV-MATH16X") key = "MATH 16X";
+    if (key === "EQUIV-MATH17X") key = "MATH 17X";
+
+    // Normalize WRTG 273
+    if (key === "WRTG273" || key === "WRTG 273") {
+        key = "WRTG 273 (Soph. & Juniors only)";
+    }
+
+    setFocusedCourseId(key);
   };
 
   // 返回“主界面” = 回到默认中心课程
