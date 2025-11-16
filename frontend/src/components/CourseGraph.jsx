@@ -6,7 +6,7 @@ const rawNodes = rawData.nodes ?? rawData;
 const courseLinks = rawData.links ?? [];
 
 // 只展示非 EQUIV-xxxx 课程
-const courseNodes = rawNodes.filter(
+let courseNodes = rawNodes.filter(
   (c) => c && c.id && !c.id.startsWith("EQUIV-")
 );
 
@@ -65,6 +65,23 @@ function buildAdjacency(nodes, links) {
 }
 
 const ADJ = buildAdjacency(rawNodes, courseLinks);
+// 确保所有出现在边里的节点 id（包括只在 links 里出现的 MATH 课程）
+// 至少有一个 stub 节点，这样它们也会在 graph 中被画出来。
+ADJ.forEach((_, nodeId) => {
+  if (!nodeId) return;
+  const idStr = String(nodeId);
+  const upper = idStr.toUpperCase();
+
+  // 跳过内部用的 EQUIV- 节点
+  if (upper.startsWith("EQUIV-")) return;
+
+  // 如果原始 rawNodes 里没有这门课，为它创建一个最小的 stub
+  if (!idToCourse.has(nodeId)) {
+    const stub = { id: nodeId };
+    idToCourse.set(nodeId, stub);
+    courseNodes.push(stub);
+  }
+});
 
 // BFS：从 root 出发的最短 hop 数
 function computeDistances(rootId) {

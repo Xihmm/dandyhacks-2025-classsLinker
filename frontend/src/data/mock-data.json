@@ -697,7 +697,77 @@
       "title": "Philosophy of Artificial Intelligence",
       "prerequisites": [],
       "cluster": "Writing"
-    }
+    },
+    {
+      "id": "MATH 141",
+      "department": "MATH",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Calculus I",
+      "credits": 4,
+      "instructor": "Erik Davis",
+      "offered": "Fall, Spring, Summer",
+      "prerequisites": []
+    },
+    {
+      "id": "MATH 142",
+      "department": "MATH",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Calculus II",
+      "credits": 4,
+      "instructor": "Elizabeth Tatum",
+      "offered": "Fall, Spring, Summer",
+      "prerequisites": ["MATH 141"]
+    },
+    {
+      "id": "MATH 143",
+      "department": "MATH",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Calculus III",
+      "credits": 4,
+      "instructor": "Kiera Harmatz-Kean",
+      "offered": "Fall, Spring, Summer",
+      "prerequisites": ["MATH 142"]
+    },
+    {
+      "id": "MATH 161",
+      "department": "MATH",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Calculus IA",
+      "credits": 4,
+      "instructor": "",
+      "offered": "Fall, Spring, Summer",
+      "prerequisites": []
+    },
+    {
+      "id": "MATH 162",
+      "department": "MATH",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Calculus IIA",
+      "credits": 4,
+      "instructor": "Peter Oberly",
+      "offered": "Fall, Spring, Summer",
+      "prerequisites": ["MATH 161"]
+    },
+    {
+      "id": "MATH 171",
+      "department": "MATH",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Honors Calculus I",
+      "credits": 5,
+      "instructor": "Undecided",
+      "offered": "Fall, Spring, Summer",
+      "prerequisites": []
+    },
+    {
+      "id": "MATH 172",
+      "department": "MATH",
+      "school": "Arts, Sciences, and Engineering",
+      "title": "Honors Calculus II",
+      "credits": 5,
+      "instructor": "Amanda Tucker",
+      "offered": "Fall, Spring, Summer",
+      "prerequisites": ["MATH 171"]
+    }  
   ],
   "links": [
     {
@@ -814,76 +884,6 @@
       "source": "CSC 282",
       "target": "EQUIV-MATH17X",
       "type": "prerequisite"
-    },
-    {
-      "id": "MATH 141",
-      "department": "MATH",
-      "school": "Arts, Sciences, and Engineering",
-      "title": "Calculus I",
-      "credits": 4,
-      "instructor": "Erik Davis",
-      "offered": "Fall, Spring, Summer",
-      "prerequisites": []
-    },
-    {
-      "id": "MATH 142",
-      "department": "MATH",
-      "school": "Arts, Sciences, and Engineering",
-      "title": "Calculus II",
-      "credits": 4,
-      "instructor": "Elizabeth Tatum",
-      "offered": "Fall, Spring, Summer",
-      "prerequisites": ["MATH 141"]
-    },
-    {
-      "id": "MATH 143",
-      "department": "MATH",
-      "school": "Arts, Sciences, and Engineering",
-      "title": "Calculus III",
-      "credits": 4,
-      "instructor": "Kiera Harmatz-Kean",
-      "offered": "Fall, Spring, Summer",
-      "prerequisites": ["MATH 142"]
-    },
-    {
-      "id": "MATH 161",
-      "department": "MATH",
-      "school": "Arts, Sciences, and Engineering",
-      "title": "Calculus IA",
-      "credits": 4,
-      "instructor": "",
-      "offered": "Fall, Spring, Summer",
-      "prerequisites": []
-    },
-    {
-      "id": "MATH 162",
-      "department": "MATH",
-      "school": "Arts, Sciences, and Engineering",
-      "title": "Calculus IIA",
-      "credits": 4,
-      "instructor": "Peter Oberly",
-      "offered": "Fall, Spring, Summer",
-      "prerequisites": ["MATH 161"]
-    },
-    {
-      "id": "MATH 171",
-      "department": "MATH",
-      "school": "Arts, Sciences, and Engineering",
-      "title": "Honors Calculus I",
-      "credits": 5,
-      "instructor": "Undecided",
-      "offered": "Fall, Spring, Summer",
-      "prerequisites": []
-    },
-    {
-      "id": "MATH 172",
-      "department": "MATH",
-      "school": "Arts, Sciences, and Engineering",
-      "title": "Honors Calculus II",
-      "credits": 5,
-      "instructor": "Amanda Tucker",
-      "offered": "Fall, Spring, Summer",
-      "prerequisites": ["MATH 171"]
     }
   ]
 }
