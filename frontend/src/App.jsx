@@ -16,6 +16,10 @@ const rawEdges = Array.isArray(rawData?.edges)
   ? rawData.edges
   : [];
 
+const normalizeId = (s) =>
+  typeof s === "string" ? s.toUpperCase().replace(/\s+/g, "") : "";
+
+
 const COURSE_IDS = rawNodes
   .map((n) => n && n.id)
   .filter((id) => typeof id === "string")
@@ -24,8 +28,6 @@ const COURSE_IDS = rawNodes
   // ⭐ 新增：创建一个标准化的、可见课程ID的Set，用于快速查找
 const NORM_COURSE_IDS = new Set(COURSE_IDS.map(normalizeId));
 
-const normalizeId = (s) =>
-  typeof s === "string" ? s.toUpperCase().replace(/\s+/g, "") : "";
 
 function CourseDetail({ course, onAddToPlan, onClose, onGoToRequirements }) {
   if (!course) {
