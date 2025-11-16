@@ -294,21 +294,39 @@ function App() {
     });
   };
 
-  const handleJumpFromCsToGraph = (courseId) => {
+const handleJumpFromCsToGraph = (courseId) => {
     const id = String(courseId).toUpperCase();
-    const normId = normalizeId(id);
+    let normId = normalizeId(id);
 
-    // 1. 检查传来的ID是否本身就是一个可见的课程ID
+    // ⭐ 步骤 1：硬编码的“数学课->CS课”映射表
+    // (因为 MTH 141, 150 等节点在 Graph 视图中不可见)
+    const mathToCsMap = {
+      "MATH141": "CSC171",
+      "MATH142": "CSC171", // MTH 142 也是 171 的先修
+      "MATH143": "CSC172", // MTH 143 是 172 的先修
+      "MATH150": "CSC171",
+      "MATH14X": "CSC171",
+      "MATH16X": "CSC172", // (MTH 16X 通常用于 172)
+      "MATH17X": "CSC172", // (MTH 17X 通常用于 172)
+    };
+
+    if (mathToCsMap[normId]) {
+      const targetCourseId = mathToCsMap[normId];
+      setActivePage("graph");
+      setFocusedCourseId(targetCourseId); // 跳转到 CSC 171 或 172
+      setSelectedCourse(null);
+      return; // 完成跳转！
+    }
+
+    // ⭐ 步骤 2：检查是否为 "可见" 节点 (例如 CSC 259)
     if (NORM_COURSE_IDS.has(normId)) {
       setActivePage("graph");
       setFocusedCourseId(id);
       setSelectedCourse(null);
-      return;
+      return; // 完成跳转！
     }
 
-    // 2. 如果不是，说明它可能是一个虚拟节点 (如 EQUIV-MTH-150)
-    //    我们需要在 "边" (rawEdges) 中查找它连接到哪个 "可见" 节点
-    
+    // ⭐ 步骤 3：检查是否为 "EQUIV-" 虚拟节点 (我们之前修复的)
     let finalId = id; // 默认ID
 
     // 查找一条边：从这个虚拟节点 -> 指向一个可见节点
@@ -329,11 +347,11 @@ function App() {
       });
       
       if (sourceEdge) {
-        finalId = sourceEdge.source.toUpperCase(); // 找到了！(例如 "CSC 160")
+        finalId = sourceEdge.source.toUpperCase(); // 找到了！
       }
     }
 
-    // 3. 使用 finalId (无论是原始ID还是翻译后的ID) 来跳转
+    // ⭐ 步骤 4：使用 finalId (无论是原始ID还是翻译后的ID) 来跳转
     setActivePage("graph");
     setFocusedCourseId(finalId);
     setSelectedCourse(null);
