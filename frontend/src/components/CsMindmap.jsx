@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 
-export default function CsMindmap({ data }) {
+export default function CsMindmap({ data, onCourseClick }) {
   const [svgHeight, setSvgHeight] = useState(800);
   const [collapsed, setCollapsed] = useState({});
 
@@ -133,6 +133,7 @@ export default function CsMindmap({ data }) {
           elements.push(
             <g
               key={course.id}
+              onClick={() => onCourseClick && onCourseClick(course.id)}
               style={{ cursor: "pointer" }}
             >
               <rect
