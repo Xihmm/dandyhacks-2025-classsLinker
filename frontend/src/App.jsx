@@ -143,6 +143,25 @@ function CourseDetail({ course, onAddToPlan, onClose }) {
         >
           Add to planner
         </button>
+
+        {onGoToRequirements && (
+          <button
+            onClick={onGoToRequirements}
+            style={{
+              marginTop: "8px",
+              padding: "8px 14px",
+              borderRadius: "999px",
+              border: "1px solid #d1d5db",
+              background: "#ffffff",
+              color: "#111827",
+              fontSize: "14px",
+              fontWeight: 500,
+              cursor: "pointer",
+            }}
+          >
+            Go to CS Requirements
+          </button>
+        )}
       </div>
     </div>
   );
@@ -355,7 +374,7 @@ function App() {
           }}
         >
           <input
-            placeholder="输入课程号（如 CSC172）"
+            placeholder="ENTER YOUR COURSE NUMBER (i.e.CSC 172)"
             value={searchText}
             onChange={handleSearchChange}
             style={{
@@ -466,6 +485,7 @@ function App() {
                   course={selectedCourse}
                   onAddToPlan={handleAddCourseToPlan}
                   onClose={() => setSelectedCourse(null)}
+                  onGoToRequirements={() => setActivePage("cs")}
                 />
               </div>
             )}
@@ -475,6 +495,17 @@ function App() {
             <CsRequirementsPage onCourseSelect={handleJumpFromCsToGraph} />
           </div>
         )}
+
+        {/* CS Requirements 副页面：始终挂载，只是按需显示 */}
+        <div
+          style={{
+            flex: 1,
+            minWidth: 0,
+            display: activePage === "cs" ? "block" : "none",
+          }}
+        >
+          <CsRequirementsPage onCourseSelect={handleJumpFromCsToGraph} />
+        </div>
       </div>
 
       {/* 右下角 Planner */}
@@ -484,6 +515,7 @@ function App() {
         onToggleVisible={() => setPlannerVisible((v) => !v)}
         onRemove={handleRemoveFromPlan}
         onReorder={handleReorderPlan}
+        onClear={handleClearPlan}
       />
     </div>
   );

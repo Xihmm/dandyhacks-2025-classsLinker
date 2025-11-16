@@ -7,6 +7,7 @@ export default function PlanFloatingPanel({
   onRemove,
   onReorder,
   onExternalDrop,
+  onClear,
 }) {
   const [dragIndex, setDragIndex] = useState(null);
 
