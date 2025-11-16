@@ -11,10 +11,18 @@ const rawNodes = Array.isArray(rawData?.nodes)
   ? rawData
   : [];
 
+  // ⭐ 新增：读取 'edges' 数据
+const rawEdges = Array.isArray(rawData?.edges)
+  ? rawData.edges
+  : [];
+
 const COURSE_IDS = rawNodes
   .map((n) => n && n.id)
   .filter((id) => typeof id === "string")
   .filter((id) => !id.toUpperCase().startsWith("EQUIV-"));
+
+  // ⭐ 新增：创建一个标准化的、可见课程ID的Set，用于快速查找
+const NORM_COURSE_IDS = new Set(COURSE_IDS.map(normalizeId));
 
 const normalizeId = (s) =>
   typeof s === "string" ? s.toUpperCase().replace(/\s+/g, "") : "";
@@ -286,8 +294,46 @@ function App() {
 
   const handleJumpFromCsToGraph = (courseId) => {
     const id = String(courseId).toUpperCase();
+    const normId = normalizeId(id);
+
+    // 1. 检查传来的ID是否本身就是一个可见的课程ID
+    if (NORM_COURSE_IDS.has(normId)) {
+      setActivePage("graph");
+      setFocusedCourseId(id);
+      setSelectedCourse(null);
+      return;
+    }
+
+    // 2. 如果不是，说明它可能是一个虚拟节点 (如 EQUIV-MTH-150)
+    //    我们需要在 "边" (rawEdges) 中查找它连接到哪个 "可见" 节点
+    
+    let finalId = id; // 默认ID
+
+    // 查找一条边：从这个虚拟节点 -> 指向一个可见节点
+    const targetEdge = rawEdges.find(edge => {
+      const sourceId = normalizeId(edge.source);
+      const targetId = normalizeId(edge.target);
+      return sourceId === normId && NORM_COURSE_IDS.has(targetId);
+    });
+
+    if (targetEdge) {
+      finalId = targetEdge.target.toUpperCase(); // 找到了！(例如 "CSC 160")
+    } else {
+      // 备用查找：查找一条边：从一个可见节点 -> 指向这个虚拟节点
+      const sourceEdge = rawEdges.find(edge => {
+        const sourceId = normalizeId(edge.source);
+        const targetId = normalizeId(edge.target);
+        return targetId === normId && NORM_COURSE_IDS.has(sourceId);
+      });
+      
+      if (sourceEdge) {
+        finalId = sourceEdge.source.toUpperCase(); // 找到了！(例如 "CSC 160")
+      }
+    }
+
+    // 3. 使用 finalId (无论是原始ID还是翻译后的ID) 来跳转
     setActivePage("graph");
-    setFocusedCourseId(id);
+    setFocusedCourseId(finalId);
     setSelectedCourse(null);
   };
 

@@ -7,6 +7,13 @@ export default function CsRequirementsPage({ onCourseSelect }) {
     onCourseSelect(courseId);
   };
 
+  const getClickableId = (id) => {
+    if (id === "EQUIV-MATH14X") return "MATH 14X";
+    if (id === "EQUIV-MATH16X") return "MATH 16X";
+    if (id === "EQUIV-MATH17X") return "MATH 17X";
+    return id;
+  };
+
   return (
     <div style={{ flex: 1, padding: "16px" }}>
       <CsMindmap data={csData} onCourseClick={handleCourseClick} />
