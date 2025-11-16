@@ -3,7 +3,7 @@ import PlanFloatingPanel from "./components/PlanFloatingPanel";
 import rawData from "./data/mock-data.json";
 import { useState, useEffect } from "react";   // ⭐ NEW：useEffect
 import CourseGraph from "./components/CourseGraph";
-import ShortestPath from "./components/ShortestPath";
+import ShortestPath from "./components/shortestPath";
 
 const rawNodes = Array.isArray(rawData?.nodes)
   ? rawData.nodes
@@ -577,16 +577,6 @@ const handleJumpFromCsToGraph = (courseId) => {
           </div>
         )}
 
-        {/* CS Requirements 副页面：始终挂载，只是按需显示 */}
-        <div
-          style={{
-            flex: 1,
-            minWidth: 0,
-            display: activePage === "cs" ? "block" : "none",
-          }}
-        >
-          <CsRequirementsPage onCourseSelect={handleJumpFromCsToGraph} />
-        </div>
       </div>
 
       {/* 右下角 Planner */}
