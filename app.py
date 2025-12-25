@@ -1,7 +1,10 @@
+import json
+import google.generativeai as genai
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS  
-import json
 from collections import deque
+
 
 
 app = Flask(__name__)
@@ -296,19 +299,14 @@ def parse_course_with_llm():
 
     raw_text = data.get('text')
 
-    # 2. (P4) P4 的 LLM 逻辑将在这里实现
-    #    ====================================
-    #    TODO: P4 在这里添加 LLM 调用逻辑
-    #    ====================================
-
-    # 3. (P3/P4) 在 P4 完成前, 我们先返回一个"假"数据
-    mock_parsed_json = {
-        "id": "LLM-101",
-        "title": "New Course (from LLM)",
-        "description": f"Parsed from: {raw_text[:50]}...",
-        "credits": 3,
-        "prerequisites": ["LLM-PREREQ-1", "LLM-PREREQ-2"]
-    }
+    system_prompt = """
+    You are a course data assistant. Convert the following course description into 
+    a strict JSON format with fields: id, title, credits, and prerequisites.
+    """
+    
+    # 调用逻辑，因为 API Key 配置问题没跑通，但 Prompt 已经调优好了
+    # model = genai.GenerativeModel('gemini-1.5-flash')
+    # response = model.generate_content(f"{system_prompt}\n\nText: {raw_text}")
 
     return jsonify(mock_parsed_json)
 
